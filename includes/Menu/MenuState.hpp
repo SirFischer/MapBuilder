@@ -7,12 +7,16 @@
 class MenuState : public State
 {
 private:
-	mf::Button		*mQuitBtn;
-	mf::Button		*mProjectBtn;
 
 	std::ofstream 	 mMyfile;
 
-	
+	/**
+	 * UI
+	 **/
+	void		InitList();
+
+	void		InitUI();
+
 public:
 	MenuState(Window *tWindow);
 	~MenuState();
