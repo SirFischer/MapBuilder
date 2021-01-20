@@ -16,7 +16,7 @@ CC				:=	g++
 NAME			:=	MapBuilder
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*
 
-CFLAGS			:=	-Wall -Werror -Wextra -std=c++17
+CFLAGS			:=	-Wall -Werror -Wextra -std=c++20
 
 CLIBS			+= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio
 
