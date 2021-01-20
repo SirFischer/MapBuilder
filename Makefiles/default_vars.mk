@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    default_vars.mk                                    :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mfischer <mfischer@student.42.fr>          +#+  +:+       +#+         #
+#    By: mataiaz <mataiaz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:39:47 by mfischer          #+#    #+#              #
-#    Updated: 2019/11/15 14:28:15 by mfischer         ###   ########.fr        #
+#    Updated: 2021/01/20 04:09:02 by mataiaz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC				:=	g++
 
 #*#*#*#*# CHANGE PROGRAM NAME HERE #*#*#*#*#
-NAME			:=	SFMLProjectTemplate
+NAME			:=	MapBuilder
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*
 
 CFLAGS			:=	-Wall -Werror -Wextra -std=c++17
