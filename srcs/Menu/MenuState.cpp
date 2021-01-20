@@ -11,8 +11,18 @@ MenuState::~MenuState()
 
 void		MenuState::InitList()
 {
-	//add list widget
-	
+	mProfileList = mf::List::Create();
+	mf::GUI::AddWidget(mProfileList);
+
+	mf::Text	*text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "test");
+	text->SetTextColor(sf::Color::Black)->SetSize(200, 40);
+	mProfileList->AddWidget(text);
+	text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "test2");
+	text->SetTextColor(sf::Color::Black)->SetSize(200, 40);
+	mProfileList->AddWidget(text);
+	text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "test3");
+	text->SetTextColor(sf::Color::Black)->SetSize(200, 40);
+	mProfileList->AddWidget(text);
 }
 
 void		MenuState::InitUI()

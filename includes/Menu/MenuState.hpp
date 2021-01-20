@@ -14,6 +14,8 @@ private:
 
 	void		InitUI();
 
+	mf::List	*mProfileList = NULL;
+
 public:
 	MenuState(Window *tWindow);
 	~MenuState();
