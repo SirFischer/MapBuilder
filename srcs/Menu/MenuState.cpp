@@ -19,29 +19,36 @@ void		MenuState::Init()
 	/**
 	 * INIT STATE AND GUI
 	 **/
-	mPlayBtn = mf::Button::Create(sf::Color::Green, sf::Color::Cyan);
-	mPlayBtn->SetPositionPercentage(true)->SetPosition(45, 40);
+	
+	mProjectBtn = mf::Button::Create(sf::Color::Green, sf::Color::Cyan);
+	mProjectBtn->SetPositionPercentage(true)->SetPosition(45, 40);
+	mProjectBtn->SetSize(160, 40);
 	StateAction	*actionReturn = &mStateReturnAction;
 	bool		*active = &mIsActive;
-	mPlayBtn->SetClickEvent([actionReturn, active] {
+	mProjectBtn->SetClickEvent([actionReturn, active] {
 		*actionReturn = StateAction::GAME;
 		*active = false;
 	});
 
-	mPlayBtn->SetTextFont(*ResourceManager::LoadFont("assets/fonts/Roboto-Regular.ttf"));
-	mPlayBtn->SetTextColor(sf::Color::Black);
-	mPlayBtn->SetTextPosition(sf::Vector2f(15, 5));
-	mPlayBtn->SetText("Play!");
-
-
+	mProjectBtn->SetTextFont(*ResourceManager::LoadFont("assets/fonts/Roboto-Regular.ttf"));
+	mProjectBtn->SetTextColor(sf::Color::Black);
+	mProjectBtn->SetTextPosition(sf::Vector2f(28, 2));
+	mProjectBtn->SetText("Projects");
+	
 	mQuitBtn = mf::Button::Create(sf::Color::Red, sf::Color::Yellow);
 	mQuitBtn->SetPositionPercentage(true)->SetPosition(45, 50);
+	mQuitBtn->SetSize(160, 40);
 	mQuitBtn->SetClickEvent([actionReturn, active] {
 		*actionReturn = StateAction::POP;
 		*active = false;
 	});
 
-	mf::GUI::AddWidget(mPlayBtn);
+	mQuitBtn->SetTextFont(*ResourceManager::LoadFont("assets/fonts/Roboto-Regular.ttf"));
+	mQuitBtn->SetTextColor(sf::Color::Black);
+	mQuitBtn->SetTextPosition(sf::Vector2f(50, 2));
+	mQuitBtn->SetText("Quit");
+
+	mf::GUI::AddWidget(mProjectBtn);
 	mf::GUI::AddWidget(mQuitBtn);
 }
 
