@@ -29,7 +29,7 @@ void		StateManager::Run()
 			break;
 		
 		case StateAction::GAME:
-			mStates.push(new GameState(mWindow));
+			mStates.push(new EditorState(mWindow));
 			break;
 
 		case StateAction::MENU:

@@ -1,17 +1,17 @@
-#include "GameState.hpp"
+#include "EditorState.hpp"
 
-GameState::GameState(Window *tWindow)
+EditorState::EditorState(Window *tWindow)
 {
 	mWindow = tWindow;
 	mWindow->HideCursor();
 }
 
-GameState::~GameState()
+EditorState::~EditorState()
 {
 	mWindow->ShowCursor();
 }
 
-void		GameState::Init()
+void		EditorState::Init()
 {
 	mf::GUI::ClearWidgets();
 	mIsActive = true;
@@ -22,11 +22,13 @@ void		GameState::Init()
 	 **/
 }
 
-void		GameState::HandleEvents()
+void		EditorState::HandleEvents()
 {
 	sf::Event event;
 	while (mWindow->HandleEvent(event))
 	{
+		if (event.type == sf::Event::Resized)
+			mWindow->ResetView(true);
 		mf::GUI::HandleEvent(event);
 		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 		{
@@ -35,12 +37,12 @@ void		GameState::HandleEvents()
 	}
 }
 
-void		GameState::Update()
+void		EditorState::Update()
 {
 	
 }
 
-void		GameState::Render()
+void		EditorState::Render()
 {
 	mWindow->Clear(sf::Color::Green);
 

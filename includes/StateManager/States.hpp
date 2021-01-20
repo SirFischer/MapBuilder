@@ -6,6 +6,6 @@
  * Include all game states here!
  */
 
-#include "GameState.hpp"
+#include "EditorState.hpp"
 #include "MenuState.hpp"
 

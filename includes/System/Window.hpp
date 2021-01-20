@@ -49,5 +49,20 @@ public:
 	void			HideCursor();
 	void			ShowCursor();
 
+	/**
+	 * View
+	 **/
+	void			ResetView(bool tResize);
+
+	/**
+	 * Setters
+	 **/
+	void			SetView(sf::View tView);
+
+	/**
+	 * Getters
+	 **/
 	bool			IsOpen(){return (mWindow.isOpen());}
+	sf::Vector2u	GetSize(){return (mWindow.getSize());}
+	sf::View		GetCurrentView(){return (mWindow.getView());}
 };

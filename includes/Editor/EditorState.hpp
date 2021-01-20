@@ -2,14 +2,14 @@
 
 #include "State.hpp"
 
-class GameState : public State
+class EditorState : public State
 {
 private:
 	/* data */
 	
 public:
-	GameState(Window *tWindow);
-	~GameState();
+	EditorState(Window *tWindow);
+	~EditorState();
 
 	void		Init();
 	void		HandleEvents();
