@@ -32,6 +32,10 @@ void		StateManager::Run()
 			mStates.push(new EditorState(mWindow));
 			break;
 
+		case StateAction::PROFILE:
+			mStates.push(new ProfileState(mWindow));
+			break;
+
 		case StateAction::MENU:
 			mStates.push(new MenuState(mWindow));
 			break;

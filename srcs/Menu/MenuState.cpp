@@ -20,20 +20,20 @@ void		MenuState::Init()
 	 * INIT STATE AND GUI
 	 **/
 	
-	mProjectBtn = mf::Button::Create(sf::Color::Green, sf::Color::Cyan);
-	mProjectBtn->SetPositionPercentage(true)->SetPosition(45, 40);
-	mProjectBtn->SetSize(160, 40);
+	mProfilesBtn = mf::Button::Create(sf::Color::Green, sf::Color::Cyan);
+	mProfilesBtn->SetPositionPercentage(true)->SetPosition(45, 40);
+	mProfilesBtn->SetSize(160, 40);
 	StateAction	*actionReturn = &mStateReturnAction;
 	bool		*active = &mIsActive;
-	mProjectBtn->SetClickEvent([actionReturn, active] {
-		*actionReturn = StateAction::GAME;
+	mProfilesBtn->SetClickEvent([actionReturn, active] {
+		*actionReturn = StateAction::PROFILE;
 		*active = false;
 	});
 
-	mProjectBtn->SetTextFont(*ResourceManager::LoadFont("assets/fonts/Roboto-Regular.ttf"));
-	mProjectBtn->SetTextColor(sf::Color::Black);
-	mProjectBtn->SetTextPosition(sf::Vector2f(28, 2));
-	mProjectBtn->SetText("Projects");
+	mProfilesBtn->SetTextFont(*ResourceManager::LoadFont("assets/fonts/Roboto-Regular.ttf"));
+	mProfilesBtn->SetTextColor(sf::Color::Black);
+	mProfilesBtn->SetTextPosition(sf::Vector2f(28, 2));
+	mProfilesBtn->SetText("Profiles");
 	
 	mQuitBtn = mf::Button::Create(sf::Color::Red, sf::Color::Yellow);
 	mQuitBtn->SetPositionPercentage(true)->SetPosition(45, 50);
@@ -48,7 +48,7 @@ void		MenuState::Init()
 	mQuitBtn->SetTextPosition(sf::Vector2f(50, 2));
 	mQuitBtn->SetText("Quit");
 
-	mf::GUI::AddWidget(mProjectBtn);
+	mf::GUI::AddWidget(mProfilesBtn);
 	mf::GUI::AddWidget(mQuitBtn);
 }
 
