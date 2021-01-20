@@ -1,62 +1,46 @@
-#include "MenuState.hpp"
+#include "ProfileState.hpp"
 
-MenuState::MenuState(Window *tWindow)
+ProfileState::ProfileState(Window *tWindow)
 {
 	mWindow = tWindow;
 }
 
-MenuState::~MenuState()
+ProfileState::~ProfileState()
 {
 }
 
-void		MenuState::InitList()
-{
-	//add list widget
-	
-}
 
-void		MenuState::InitUI()
+void		ProfileState::Init()
 {
-	mf::GUI::ClearWidgets();
-
-	InitList();
-}
-
-void		MenuState::Init()
-{
+    mf::GUI::ClearWidgets();
 	mIsActive = true;
 	mStateReturnAction = StateAction::POP;
 	mWindow->ShowCursor();
-
-	/**
-	 * INIT STATE AND GUI
-	 **/
-	
-	InitUI();
 }
 
-void		MenuState::HandleEvents()
+void		ProfileState::HandleEvents()
 {
-	sf::Event event;
+    sf::Event event;
 	while (mWindow->HandleEvent(event))
 	{
 		if (event.type == sf::Event::Resized)
 			mWindow->ResetView(true);
-			
 		mf::GUI::HandleEvent(event);
 		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+		{
 			mIsActive = false;
+		}
 	}
 }
 
-void		MenuState::Update()
+void		ProfileState::Update()
 {
-	
+
 }
 
-void		MenuState::Render()
+void		ProfileState::Render()
 {
-	mWindow->Clear(sf::Color::Black);
+    mWindow->Clear(sf::Color::Black);
 	
 	mf::GUI::Render();
 	mWindow->Render();
