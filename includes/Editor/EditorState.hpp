@@ -11,7 +11,7 @@ public:
 	EditorState(Window *tWindow);
 	~EditorState();
 
-	void		Init();
+	void		Init(Data *tData);
 	void		HandleEvents();
 	void		Update();
 	void		Render();

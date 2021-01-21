@@ -10,12 +10,13 @@ ProfileState::~ProfileState()
 }
 
 
-void		ProfileState::Init()
+void		ProfileState::Init(Data *tData)
 {
     mf::GUI::ClearWidgets();
 	mIsActive = true;
 	mStateReturnAction = StateAction::POP;
 	mWindow->ShowCursor();
+	mData = tData;
 }
 
 void		ProfileState::HandleEvents()

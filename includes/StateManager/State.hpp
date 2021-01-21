@@ -2,6 +2,7 @@
 
 #include "Window.hpp"
 #include "StateAction.hpp"
+#include "Data.hpp"
 
 class State
 {
@@ -13,12 +14,14 @@ protected:
 	bool			mIsActive = true;
 	Window			*mWindow = NULL;
 
+	Data			*mData = NULL;
+
 
 public:
 
 	virtual				~State() {}
 
-	virtual void		Init() = 0;
+	virtual void		Init(Data *tData) = 0;
 	virtual StateAction	Run();
 	virtual void		HandleEvents() = 0;
 	virtual void		Update() = 0;

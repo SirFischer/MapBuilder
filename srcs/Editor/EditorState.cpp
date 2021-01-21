@@ -11,15 +11,17 @@ EditorState::~EditorState()
 	mWindow->ShowCursor();
 }
 
-void		EditorState::Init()
+void		EditorState::Init(Data *tData)
 {
 	mf::GUI::ClearWidgets();
 	mIsActive = true;
 	mStateReturnAction = StateAction::POP;
-
+	mData = tData;
 	/**
 	 * INIT STATE AND GUI
 	 **/
+
+	std::cout << mData->mPath << std::endl;
 }
 
 void		EditorState::HandleEvents()

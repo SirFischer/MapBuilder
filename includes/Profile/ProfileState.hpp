@@ -12,7 +12,7 @@ public:
     ProfileState(Window *tWindow);
     ~ProfileState();
 
-    void		Init();
+    void		Init(Data *tData);
 	void		HandleEvents();
 	void		Update();
 	void		Render();

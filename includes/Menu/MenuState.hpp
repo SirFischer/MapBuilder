@@ -27,7 +27,7 @@ public:
 	MenuState(Window *tWindow);
 	~MenuState();
 
-	void		Init();
+	void		Init(Data *tData);
 	void		HandleEvents();
 	void		Update();
 	void		Render();

@@ -7,6 +7,5 @@ enum class StateAction
 	OPTIONS,
 	PROFILE,
 	SETUP,
-	GAME,
-	INGAME_MENU
+	EDITOR
 };

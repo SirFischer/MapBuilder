@@ -11,6 +11,9 @@ MenuState::~MenuState()
 
 void		MenuState::LoadProfiles()
 {
+	Data		*data = mData;
+	StateAction	*stateReturnAction = &mStateReturnAction;
+	bool		*isRunning = &mIsActive;
 	for (const auto &entry : std::filesystem::directory_iterator(PROFILE_DIR_PATH))
 	{
 		Profile profile(entry.path());
@@ -18,6 +21,11 @@ void		MenuState::LoadProfiles()
 		btn->SetSize(90, 5)->SetSizePercentage(true);
 		btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText(profile.GetName())
 		->SetCharacterSize(15)->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+		btn->SetClickEvent([data, entry, stateReturnAction, isRunning]{
+			data->mPath = entry.path();
+			*stateReturnAction = StateAction::EDITOR;
+			*isRunning = false;
+		});
 		mProfileList->AddWidget(btn);
 	}
 }
@@ -43,11 +51,12 @@ void		MenuState::InitUI()
 	InitList();
 }
 
-void		MenuState::Init()
+void		MenuState::Init(Data *tData)
 {
 	mIsActive = true;
 	mStateReturnAction = StateAction::POP;
 	mWindow->ShowCursor();
+	mData = tData;
 
 	/**
 	 * INIT STATE AND GUI

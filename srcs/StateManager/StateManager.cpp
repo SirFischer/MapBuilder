@@ -15,10 +15,11 @@ StateManager::~StateManager()
 void		StateManager::Run()
 {
 	StateAction	action = StateAction::POP;
+	Data		data;
 
 	while (mStates.size())
 	{
-		mStates.top()->Init();
+		mStates.top()->Init(&data);
 		action = mStates.top()->Run();
 
 		switch (action)
@@ -28,7 +29,7 @@ void		StateManager::Run()
 			mStates.pop();
 			break;
 		
-		case StateAction::GAME:
+		case StateAction::EDITOR:
 			mStates.push(new EditorState(mWindow));
 			break;
 
