@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
+
+#include "Profile.hpp"
 
 struct Data
 {
-	std::string		mPath;
+	Profile			mProfile;
 };

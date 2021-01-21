@@ -8,10 +8,11 @@
 class Profile
 {
 private:
-	std::string		mPath = "default";
-	std::string		mName = "default";
+	std::string		mPath = "assets/profiles/newProfile.profile";
+	std::string		mName = "newProfile";
 
 public:
+	Profile();
 	Profile(std::string tPath);
 	~Profile();
 

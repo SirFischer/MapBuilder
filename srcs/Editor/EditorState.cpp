@@ -21,7 +21,7 @@ void		EditorState::Init(Data *tData)
 	 * INIT STATE AND GUI
 	 **/
 
-	std::cout << mData->mPath << std::endl;
+	std::cout << mData->mProfile.GetName() << std::endl;
 }
 
 void		EditorState::HandleEvents()

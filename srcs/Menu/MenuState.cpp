@@ -21,9 +21,9 @@ void		MenuState::LoadProfiles()
 		btn->SetSize(90, 5)->SetSizePercentage(true);
 		btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText(profile.GetName())
 		->SetCharacterSize(15)->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
-		btn->SetClickEvent([data, entry, stateReturnAction, isRunning]{
-			data->mPath = entry.path();
-			*stateReturnAction = StateAction::EDITOR;
+		btn->SetClickEvent([data, profile, stateReturnAction, isRunning]{
+			data->mProfile = profile;
+			*stateReturnAction = StateAction::PROFILE;
 			*isRunning = false;
 		});
 		mProfileList->AddWidget(btn);

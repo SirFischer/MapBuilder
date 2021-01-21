@@ -7,7 +7,8 @@ class ProfileState : public State
 
 {
 private:
-    /* data */
+    void		InitUI();
+	
 public:
     ProfileState(Window *tWindow);
     ~ProfileState();

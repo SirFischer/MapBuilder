@@ -1,5 +1,10 @@
 #include "Profile.hpp"
 
+Profile::Profile()
+{
+	
+}
+
 Profile::Profile(std::string tPath)
 {
 	std::fstream		profileFile;
