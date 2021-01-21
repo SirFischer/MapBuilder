@@ -2,7 +2,7 @@
 
 Profile::Profile()
 {
-	
+
 }
 
 Profile::Profile(std::string tPath)
@@ -22,6 +22,11 @@ Profile::Profile(std::string tPath)
 			std::getline(ss, token, ' ');
 			std::getline(ss, token, ' ');
 			mName = token;
+		} else if (token == "map")
+		{
+			std::getline(ss, token, ' ');
+			std::getline(ss, token, ' ');
+			mMaps.push_back(token);
 		}
 	}
 }
