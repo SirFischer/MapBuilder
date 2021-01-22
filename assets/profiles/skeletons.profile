@@ -1,1 +1,1 @@
-name = skeleton
+name=skeleton

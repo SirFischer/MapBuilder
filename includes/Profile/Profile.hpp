@@ -13,6 +13,7 @@ private:
 	std::string					mName = "newProfile";
 	std::vector<std::string>	mMaps;
 
+	void						Load();
 public:
 	Profile();
 	Profile(std::string tPath);

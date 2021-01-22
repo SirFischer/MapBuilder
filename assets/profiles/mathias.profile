@@ -1,1 +1,1 @@
-name = mathias
+name=mathias the traveler

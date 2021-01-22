@@ -1,1 +1,1 @@
-name = test
+name=test de la mort

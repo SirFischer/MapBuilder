@@ -2,11 +2,14 @@
 
 #include "State.hpp"
 #include "ResourceManager.hpp"
+#include "Map.hpp"
 
 class ProfileState : public State
 
 {
 private:
+	void		InitMapList();
+	void		InitBackButton();
     void		InitUI();
 	
 public:

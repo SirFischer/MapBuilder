@@ -21,7 +21,7 @@ void		EditorState::Init(Data *tData)
 	 * INIT STATE AND GUI
 	 **/
 
-	std::cout << mData->mProfile.GetName() << std::endl;
+	std::cout << mData->mMap.GetName() << std::endl;
 }
 
 void		EditorState::HandleEvents()
@@ -46,7 +46,7 @@ void		EditorState::Update()
 
 void		EditorState::Render()
 {
-	mWindow->Clear(sf::Color::Green);
+	mWindow->Clear(sf::Color(100, 100, 100, 255));
 
 	//RENDER YOUR STUFF
 	
