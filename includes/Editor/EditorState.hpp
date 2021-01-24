@@ -1,12 +1,15 @@
 #pragma once
 
 #include "State.hpp"
+#include "EditorWidget.hpp"
 
 class EditorState : public State
 {
 private:
-	/* data */
-	
+	EditorWidget	*mEditor;
+
+	sf::CircleShape	circle;
+
 public:
 	EditorState(Window *tWindow);
 	~EditorState();

@@ -1,6 +1,7 @@
 #include "EditorState.hpp"
 
 EditorState::EditorState(Window *tWindow)
+:circle(100)
 {
 	mWindow = tWindow;
 	mWindow->HideCursor();
@@ -20,7 +21,8 @@ void		EditorState::Init(Data *tData)
 	/**
 	 * INIT STATE AND GUI
 	 **/
-
+	mEditor = EditorWidget::Create();
+	mf::GUI::AddWidget(mEditor);
 	std::cout << mData->mMap.GetName() << std::endl;
 }
 
@@ -51,5 +53,10 @@ void		EditorState::Render()
 	//RENDER YOUR STUFF
 	
 	mf::GUI::Render();
+
+	mWindow->SetView(*mEditor->GetView(mWindow->GetRenderWindow()));
+	mWindow->Draw(circle);
+	mWindow->ResetView(true);
+
 	mWindow->Render();
 }

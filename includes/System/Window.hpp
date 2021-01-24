@@ -62,7 +62,8 @@ public:
 	/**
 	 * Getters
 	 **/
-	bool			IsOpen(){return (mWindow.isOpen());}
-	sf::Vector2u	GetSize(){return (mWindow.getSize());}
-	sf::View		GetCurrentView(){return (mWindow.getView());}
+	sf::RenderWindow	*GetRenderWindow(){return (&mWindow);}
+	bool				IsOpen(){return (mWindow.isOpen());}
+	sf::Vector2u		GetSize(){return (mWindow.getSize());}
+	sf::View			GetCurrentView(){return (mWindow.getView());}
 };
