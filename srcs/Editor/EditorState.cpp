@@ -1,7 +1,6 @@
 #include "EditorState.hpp"
 
 EditorState::EditorState(Window *tWindow)
-:circle(100)
 {
 	mWindow = tWindow;
 	mWindow->HideCursor();
@@ -53,10 +52,30 @@ void		EditorState::Render()
 	//RENDER YOUR STUFF
 	
 	mf::GUI::Render();
-
 	mWindow->SetView(*mEditor->GetView(mWindow->GetRenderWindow()));
-	mWindow->Draw(circle);
+	RenderGrid();
 	mWindow->ResetView(true);
 
 	mWindow->Render();
+}
+
+void		EditorState::RenderGrid()
+{
+	float	x = 0;
+	float	y = 0;
+
+	while (y < mWindow->GetSize().y)
+	{
+		mLine[0].position = sf::Vector2f(0, y);
+		mLine[1].position = sf::Vector2f(mWindow->GetSize().x, y);
+		mWindow->Draw(mLine, 2, sf::Lines);
+		y += mGridCellSize;
+	}
+	while (x < mWindow->GetSize().x)
+	{
+		mLine[0].position = sf::Vector2f(x, 0);
+		mLine[1].position = sf::Vector2f(x, mWindow->GetSize().y);
+		mWindow->Draw(mLine, 2, sf::Lines);
+		x += mGridCellSize;
+	}
 }

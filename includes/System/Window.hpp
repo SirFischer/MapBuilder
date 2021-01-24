@@ -31,6 +31,7 @@ public:
 	 * Basic drawing utilities
 	 **/
 	void			Draw(sf::Drawable &tDrawable);
+	void			Draw(const sf::Vertex *tVertices, std::size_t tVertexCount, sf::PrimitiveType tPrimitiveType);
 	void			Clear();
 	void			Clear(sf::Color tColor);
 	void			Render();

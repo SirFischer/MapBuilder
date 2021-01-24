@@ -8,15 +8,18 @@ class EditorState : public State
 private:
 	EditorWidget	*mEditor;
 
-	sf::CircleShape	circle;
+	sf::Vertex		mLine[2];
+	float			mGridCellSize = 50.f;
+
+	void			RenderGrid();
 
 public:
 	EditorState(Window *tWindow);
 	~EditorState();
 
-	void		Init(Data *tData);
-	void		HandleEvents();
-	void		Update();
-	void		Render();
+	void			Init(Data *tData);
+	void			HandleEvents();
+	void			Update();
+	void			Render();
 };
 

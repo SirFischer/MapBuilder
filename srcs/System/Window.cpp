@@ -26,6 +26,11 @@ void	Window::Draw(sf::Drawable &tDrawable)
 	mWindow.draw(tDrawable);
 }
 
+void	Window::Draw(const sf::Vertex *tVertices, std::size_t tVertexCount, sf::PrimitiveType tPrimitiveType)
+{
+	mWindow.draw(tVertices, tVertexCount, tPrimitiveType);
+}
+
 void	Window::Clear()
 {
 	mWindow.clear();
