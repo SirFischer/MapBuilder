@@ -3,26 +3,55 @@
 EditorState::EditorState(Window *tWindow)
 {
 	mWindow = tWindow;
-	mWindow->HideCursor();
 }
 
 EditorState::~EditorState()
 {
-	mWindow->ShowCursor();
 }
+
+void		EditorState::InitOptions()
+{
+	mf::Text	*gridSizeSliderLabel = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Grid Size:");
+	gridSizeSliderLabel->SetBackgroundColor(sf::Color::Transparent);
+	gridSizeSliderLabel->SetSize(200, 30);
+	mOptions->AddWidget(gridSizeSliderLabel);
+	mGridSizeSlider = mf::Slider::Create();
+	mGridSizeSlider->SetSize(300, 40);
+	mGridSizeSlider->SetValue(0.5);
+	mOptions->AddWidget(mGridSizeSlider);
+}
+
+
+void		EditorState::InitGUI()
+{
+	//Editor View
+	mEditor = EditorWidget::Create();
+	mf::GUI::AddWidget(mEditor);
+
+	//Options
+	mOptions = mf::List::Create();
+	mOptions->SetPosition(75, 5)->SetPositionPercentage(true);
+	mOptions->SetSize(23, 90)->SetSizePercentage(true);
+	mOptions->SetContentPosition(sf::Vector2f(10, 5));
+	mOptions->SetBackgroundColor(sf::Color::Transparent);
+	mOptions->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
+	mf::GUI::AddWidget(mOptions);
+
+	InitOptions();
+}
+
 
 void		EditorState::Init(Data *tData)
 {
 	mf::GUI::ClearWidgets();
 	mIsActive = true;
+	mWindow->ShowCursor();
 	mStateReturnAction = StateAction::POP;
 	mData = tData;
 	/**
 	 * INIT STATE AND GUI
 	 **/
-	mEditor = EditorWidget::Create();
-	mf::GUI::AddWidget(mEditor);
-	std::cout << mData->mMap.GetName() << std::endl;
+	InitGUI();
 }
 
 void		EditorState::HandleEvents()
@@ -42,7 +71,7 @@ void		EditorState::HandleEvents()
 
 void		EditorState::Update()
 {
-	
+	mGridCellSize = (std::clamp(mGridSizeSlider->GetValue(), 0.f, 1.f) * 100) + 10;
 }
 
 void		EditorState::Render()

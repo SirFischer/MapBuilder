@@ -4,7 +4,7 @@ EditorWidget::EditorWidget(/* args */)
 :mBackground(&mPos, &mSize)
 {
 	mBackground.SetBackground(sf::Color::Black);
-	SetSize(70, 85);
+	SetSize(70, 90);
 	SetPositionPercentage(true);
 	SetSizePercentage(true);
 	SetPosition(2, 5);
