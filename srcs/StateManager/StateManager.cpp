@@ -28,7 +28,7 @@ void		StateManager::Run()
 			delete mStates.top();
 			mStates.pop();
 			break;
-		
+
 		case StateAction::EDITOR:
 			mStates.push(new EditorState(mWindow));
 			break;
@@ -39,6 +39,10 @@ void		StateManager::Run()
 
 		case StateAction::MENU:
 			mStates.push(new MenuState(mWindow));
+			break;
+
+		case StateAction::OPTIONS:
+			mStates.push(new SettingsState(mWindow));
 			break;
 
 		default:

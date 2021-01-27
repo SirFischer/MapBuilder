@@ -24,6 +24,7 @@ private:
 	void			RenderGrid();
 
 	void			InitGUI();
+	void			InitBackButton();
 	void			InitOptions();
 	void			InitTextures();
 public:

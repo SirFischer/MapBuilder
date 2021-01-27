@@ -24,7 +24,7 @@ void		ProfileState::InitMapList()
 	for (auto &entry : maps)
 	{
 		Map	map(entry);
-		mf::Button		*btn = mf::Button::Create(sf::Color::Green, sf::Color::Yellow);
+		mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
 		btn->SetSize(90, 5)->SetSizePercentage(true);
 		btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText(map.GetName())->SetCharacterSize(15)
 		->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
@@ -42,9 +42,9 @@ void		ProfileState::InitBackButton()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 
-	mf::Button		*btn = mf::Button::Create(sf::Color::Green, sf::Color::Yellow);
-	btn->SetSize(100, 50);
-	btn->SetPosition(10, 10);
+	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(100, 40);
+	btn->SetPosition(1, 94)->SetPositionPercentage(true);
 	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Back")->SetCharacterSize(15)
 	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
 	btn->SetClickEvent([stateReturnAction, isRunning]{

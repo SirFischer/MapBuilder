@@ -21,6 +21,12 @@ void		MenuState::LoadMenu()
 	settingsButton->SetSize(90, 7)->SetSizePercentage(true);
 	settingsButton->SetText("Settings")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
 	settingsButton->SetCharacterSize(20);
+	bool		*active = &mIsActive;
+	StateAction	*action = &mStateReturnAction;
+	settingsButton->SetClickEvent([action, active]{
+		*active = false;
+		*action = StateAction::OPTIONS;
+	});
 	mMenuList->AddWidget(settingsButton);
 
 	mf::Button	*createButton = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
@@ -38,7 +44,7 @@ void		MenuState::LoadProfiles()
 	for (const auto &entry : std::filesystem::directory_iterator(PROFILE_DIR_PATH))
 	{
 		Profile profile(entry.path());
-		mf::Button		*btn = mf::Button::Create(sf::Color::Green, sf::Color::Yellow);
+		mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
 		btn->SetSize(90, 5)->SetSizePercentage(true);
 		btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText(profile.GetName())
 		->SetCharacterSize(15)->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));

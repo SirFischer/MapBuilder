@@ -9,4 +9,5 @@
 #include "EditorState.hpp"
 #include "MenuState.hpp"
 #include "ProfileState.hpp"
+#include "SettingsState.hpp"
 
