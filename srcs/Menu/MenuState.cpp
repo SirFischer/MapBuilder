@@ -9,6 +9,27 @@ MenuState::~MenuState()
 {
 }
 
+void		MenuState::LoadMenu()
+{
+	mf::Text	*text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Welcome to the map builder, create or select a profile to start editing some maps...");
+	text->SetBackgroundColor(sf::Color::Transparent);
+	text->SetSize(90, 10)->SetSizePercentage(true);
+	text->SetCharacterSize(18);
+	mMenuList->AddWidget(text);
+
+	mf::Button	*settingsButton = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	settingsButton->SetSize(90, 7)->SetSizePercentage(true);
+	settingsButton->SetText("Settings")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
+	settingsButton->SetCharacterSize(20);
+	mMenuList->AddWidget(settingsButton);
+
+	mf::Button	*createButton = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	createButton->SetSize(90, 7)->SetSizePercentage(true);
+	createButton->SetText("Create new profile")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
+	createButton->SetCharacterSize(20);
+	mMenuList->AddWidget(createButton);
+}
+
 void		MenuState::LoadProfiles()
 {
 	Data		*data = mData;
@@ -42,6 +63,14 @@ void		MenuState::InitList()
 
 	LoadProfiles();
 
+	mMenuList = mf::List::Create();
+	mMenuList->SetSize(25, 90)->SetSizePercentage(true);
+	mMenuList->SetPosition(72, 5)->SetPositionPercentage(true);
+	mMenuList->SetBackgroundColor(sf::Color::Transparent)->SetOutlineThickness(1)->SetOutlineColor(sf::Color::Black);
+	mMenuList->SetContentPosition(sf::Vector2f(20, 5));
+	mf::GUI::AddWidget(mMenuList);
+
+	LoadMenu();
 }
 
 void		MenuState::InitUI()

@@ -11,6 +11,7 @@ EditorState::~EditorState()
 
 void		EditorState::InitOptions()
 {
+	InitTextures();
 	mf::Text	*gridSizeSliderLabel = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Grid Size:");
 	gridSizeSliderLabel->SetBackgroundColor(sf::Color::Transparent);
 	gridSizeSliderLabel->SetSize(200, 30);
@@ -19,6 +20,18 @@ void		EditorState::InitOptions()
 	mGridSizeSlider->SetSize(300, 40);
 	mGridSizeSlider->SetValue(0.5);
 	mOptions->AddWidget(mGridSizeSlider);
+}
+
+void		EditorState::InitTextures()
+{
+	//LOAD ALL TEXTURES INTO OPTIONS
+	mTextures = mf::List::Create();
+	mTextures->SetSize(95, 40)->SetSizePercentage(true);
+	mTextures->SetContentPosition(sf::Vector2f(10, 5));
+	mTextures->SetBackgroundColor(sf::Color::White);
+	mTextures->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
+	mOptions->AddWidget(mTextures);
+
 }
 
 

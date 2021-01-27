@@ -8,6 +8,7 @@ class EditorState : public State
 private:
 	EditorWidget	*mEditor;
 	mf::List		*mOptions;
+	mf::List		*mTextures;
 
 	/**
 	 * Options
@@ -24,6 +25,7 @@ private:
 
 	void			InitGUI();
 	void			InitOptions();
+	void			InitTextures();
 public:
 	EditorState(Window *tWindow);
 	~EditorState();

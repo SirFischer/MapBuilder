@@ -13,6 +13,7 @@ class MenuState : public State
 private:
 
 	void		LoadProfiles();
+	void		LoadMenu();
 
 	/**
 	 * UI
@@ -22,6 +23,7 @@ private:
 	void		InitUI();
 
 	mf::List	*mProfileList = NULL;
+	mf::List	*mMenuList = NULL;
 
 public:
 	MenuState(Window *tWindow);
