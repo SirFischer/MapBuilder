@@ -9,78 +9,43 @@ EditorState::~EditorState()
 {
 }
 
-
-void		EditorState::InitBackButton()
-{
-	StateAction					*stateReturnAction = &mStateReturnAction;
-	bool						*isRunning = &mIsActive;
-
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
-	btn->SetSize(100, 40);
-	btn->SetPosition(1, 94)->SetPositionPercentage(true);
-	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Back")->SetCharacterSize(15)
-	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
-	btn->SetClickEvent([stateReturnAction, isRunning]{
-		*stateReturnAction = StateAction::POP;
-		*isRunning = false;
-	});
-	mf::GUI::AddWidget(btn);
-}
-
-void		EditorState::InitOptions()
-{
-	InitTextures();
-	mf::Text	*gridSizeSliderLabel = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Grid Size:");
-	gridSizeSliderLabel->SetBackgroundColor(sf::Color::Transparent);
-	gridSizeSliderLabel->SetSize(200, 30);
-	mOptions->AddWidget(gridSizeSliderLabel);
-	mGridSizeSlider = mf::Slider::Create();
-	mGridSizeSlider->SetSize(300, 40);
-	mGridSizeSlider->SetValue(0.5);
-	mOptions->AddWidget(mGridSizeSlider);
-}
-
 void		EditorState::InitTextures()
 {
 	//LOAD ALL TEXTURES INTO OPTIONS
 	mTextures = mf::List::Create();
-	mTextures->SetSize(95, 40)->SetSizePercentage(true);
-	mTextures->SetContentPosition(sf::Vector2f(10, 5));
-	mTextures->SetBackgroundColor(sf::Color::White);
-	mTextures->SetItemDirection(mf::List::eListDirection::HORIZONTAL);
-	mTextures->SetContentOverflow(mf::List::eOverflow::WRAP);
-	mTextures->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
+	mTextures->SetSize(95, 40)->SetSizePercentage(true)
+	->SetContentPosition(sf::Vector2f(10, 5))
+	->SetBackgroundColor(sf::Color::White)
+	->SetItemDirection(mf::List::eListDirection::HORIZONTAL)
+	->SetContentOverflow(mf::List::eOverflow::WRAP)
+	->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
 	mOptions->AddWidget(mTextures);
-
+	Element	**elementCurrent = &mSelectedElement;
 	for (const auto &entry : std::filesystem::directory_iterator(DEFAULT_RESOURCES))
 	{
 		//LOAD DEFAULT TEXTURES
-		mf::Image	*img = mf::Image::Create(entry.path());
-		img->SetSize(sf::Vector2f(50, 50));
-		mTextures->AddWidget(img);
+		mElementList.push_back(Element(entry.path()));
+		mf::Button	*btn = mf::Button::Create(entry.path(), entry.path());
+		std::string name = entry.path();
+		btn->SetSize(sf::Vector2f(50, 50))
+		->SetOutlineColor(sf::Color::Black);
+		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
+			btn->SetOutlineThickness(1);
+		});
+		btn->AddEventListener(mf::eEvent::EXITED, [btn] {
+			btn->SetOutlineThickness(0);
+		});
+		int num = mElementList.size();
+		std::vector<Element>	*list = &mElementList;
+		btn->SetClickEvent([elementCurrent, num, list]{
+			*elementCurrent = &(*list)[num - 1];
+		});
+		mTextures->AddWidget(btn);
 	}
 }
 
 
-void		EditorState::InitGUI()
-{
-	mf::GUI::ClearWidgets();
-	//Editor View
-	mEditor = EditorWidget::Create();
-	mf::GUI::AddWidget(mEditor);
 
-	//Options
-	mOptions = mf::List::Create();
-	mOptions->SetPosition(75, 5)->SetPositionPercentage(true);
-	mOptions->SetSize(23, 90)->SetSizePercentage(true);
-	mOptions->SetContentPosition(sf::Vector2f(10, 5));
-	mOptions->SetBackgroundColor(sf::Color::Transparent);
-	mOptions->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
-	mf::GUI::AddWidget(mOptions);
-
-	InitOptions();
-	InitBackButton();
-}
 
 
 void		EditorState::Init(Data *tData)
@@ -113,6 +78,16 @@ void		EditorState::HandleEvents()
 void		EditorState::Update()
 {
 	mGridCellSize = (std::clamp(mGridSizeSlider->GetValue(), 0.f, 1.f) * 100) + 10;
+	if (mSelectedElement != NULL && mSelectedElement != mPreviousSelectedElement)
+	{
+		mElementEditor->ClearWidgets();
+		mf::Image		*img = mf::Image::Create(mSelectedElement->GetPath());
+		img->SetSize(60, 60);
+		std::cout << mSelectedElement->GetPath() << "\n";
+		mElementEditor->AddWidget(img);
+		mPreviousSelectedElement = mSelectedElement;
+	}
+	
 }
 
 void		EditorState::Render()
@@ -123,7 +98,8 @@ void		EditorState::Render()
 	
 	mf::GUI::Render();
 	mWindow->SetView(*mEditor->GetView(mWindow->GetRenderWindow()));
-	RenderGrid();
+	if (mGridActive)
+		RenderGrid();
 	mWindow->ResetView(true);
 
 	mWindow->Render();
