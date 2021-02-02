@@ -47,9 +47,18 @@ void		EditorState::InitTextures()
 	mTextures->SetSize(95, 40)->SetSizePercentage(true);
 	mTextures->SetContentPosition(sf::Vector2f(10, 5));
 	mTextures->SetBackgroundColor(sf::Color::White);
+	mTextures->SetItemDirection(mf::List::eListDirection::HORIZONTAL);
+	mTextures->SetContentOverflow(mf::List::eOverflow::WRAP);
 	mTextures->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
 	mOptions->AddWidget(mTextures);
 
+	for (const auto &entry : std::filesystem::directory_iterator(DEFAULT_RESOURCES))
+	{
+		//LOAD DEFAULT TEXTURES
+		mf::Image	*img = mf::Image::Create(entry.path());
+		img->SetSize(sf::Vector2f(50, 50));
+		mTextures->AddWidget(img);
+	}
 }
 
 

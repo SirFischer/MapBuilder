@@ -1,7 +1,11 @@
 #pragma once
 
+#include <filesystem>
+
 #include "State.hpp"
 #include "EditorWidget.hpp"
+
+#define DEFAULT_RESOURCES "assets/defaultResources"
 
 class EditorState : public State
 {
