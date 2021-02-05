@@ -6,6 +6,7 @@
 #include "State.hpp"
 #include "EditorWidget.hpp"
 #include "Element.hpp"
+#include "ResourceManager.hpp"
 
 #define DEFAULT_RESOURCES "assets/defaultResources"
 
@@ -19,6 +20,8 @@ private:
 	Element					*mSelectedElement = NULL;
 	Element					*mPreviousSelectedElement = NULL;
 	std::vector<Element>	mElementList;
+	std::list<Element>		mMapElements;
+	sf::Sprite				mBlockSprite;
 
 	/**
 	 * Options
@@ -33,6 +36,7 @@ private:
 	float			mGridCellSize = 50.f;
 
 	void			RenderGrid();
+	void			RenderMap();
 
 	void			InitGUI();
 	void			InitBackButton();
@@ -40,6 +44,7 @@ private:
 	void			InitGridActivationButton();
 	void			InitTextures();
 	void			InitElementEditor();
+	void			InitElementPlacer();
 public:
 	EditorState(Window *tWindow);
 	~EditorState();

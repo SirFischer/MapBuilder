@@ -28,5 +28,6 @@ public:
 	EditorWidget			*SetPosition(sf::Vector2f tPos);
 	EditorWidget			*SetSize(float tX, float tY);
 	EditorWidget			*SetSize(sf::Vector2f tSize);
+	EditorWidget			*SetEventListener(mf::eEvent tEvent, std::function<void()> tListener);
 };
 

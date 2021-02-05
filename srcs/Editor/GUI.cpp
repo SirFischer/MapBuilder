@@ -78,4 +78,5 @@ void			EditorState::InitElementEditor()
 	mElementEditor->SetOutlineThickness(1);
 	mElementEditor->SetContentPosition(sf::Vector2f(5, 0));
 	mOptions->AddWidget(mElementEditor);
+	InitElementPlacer();
 }

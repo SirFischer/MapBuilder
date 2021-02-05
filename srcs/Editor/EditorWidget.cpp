@@ -60,3 +60,9 @@ sf::View		*EditorWidget::GetView(sf::RenderWindow *tWindow)
 	mView.setViewport(sf::FloatRect(mPos.x / (float)tWindow->getSize().x, mPos.y / (float)tWindow->getSize().y, mSize.x / (float)tWindow->getSize().x, mSize.y / (float)tWindow->getSize().y));
 	return (&mView);
 }
+
+EditorWidget	*EditorWidget::SetEventListener(mf::eEvent tEvent, std::function<void()> tListener)
+{
+	mEventManager.AddEventListener(tEvent, tListener);
+	return (this);
+}

@@ -26,7 +26,6 @@ void		EditorState::InitTextures()
 		//LOAD DEFAULT TEXTURES
 		mElementList.push_back(Element(entry.path()));
 		mf::Button	*btn = mf::Button::Create(entry.path(), entry.path());
-		std::string name = entry.path();
 		btn->SetSize(sf::Vector2f(50, 50))
 		->SetOutlineColor(sf::Color::Black);
 		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
@@ -44,6 +43,24 @@ void		EditorState::InitTextures()
 	}
 }
 
+void		EditorState::InitElementPlacer()
+{
+	std::list<Element>	*list = &mMapElements;
+	Window	*win = mWindow;
+	float	*size = &mGridCellSize;
+	Element	**curr = &mSelectedElement;
+	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [list, win, size, curr] {
+		if (!*curr)
+			return;
+		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*win->GetRenderWindow()));
+		(*curr)->SetGridPosition(sf::Vector2i(pos.x / *size, pos.y / *size));
+		pos.x = pos.x - ((int)pos.x % (int)*size);
+		pos.y = pos.y - ((int)pos.y % (int)*size);
+		(*curr)->SetPosition(pos);
+		list->push_back(**curr);
+		std::cout << "block added to: " << pos.x  << " - " << pos.y << '\n';
+	});
+}
 
 
 
@@ -98,6 +115,7 @@ void		EditorState::Render()
 	
 	mf::GUI::Render();
 	mWindow->SetView(*mEditor->GetView(mWindow->GetRenderWindow()));
+	RenderMap();
 	if (mGridActive)
 		RenderGrid();
 	mWindow->ResetView(true);
@@ -123,5 +141,20 @@ void		EditorState::RenderGrid()
 		mLine[1].position = sf::Vector2f(x, mWindow->GetSize().y);
 		mWindow->Draw(mLine, 2, sf::Lines);
 		x += mGridCellSize;
+	}
+}
+
+void		EditorState::RenderMap()
+{
+	for (auto &i : mMapElements)
+	{
+		sf::Texture	*texture = ResourceManager::LoadTexture(i.GetPath());
+		if (texture)
+		{
+			mBlockSprite.setTexture(*texture);
+			mBlockSprite.setPosition(sf::Vector2f(i.GetGridPosition().x * mGridCellSize, i.GetGridPosition().y * mGridCellSize));
+			mBlockSprite.setScale(sf::Vector2f(mGridCellSize / texture->getSize().x, mGridCellSize / texture->getSize().y));
+			mWindow->Draw(mBlockSprite);
+		}
 	}
 }
