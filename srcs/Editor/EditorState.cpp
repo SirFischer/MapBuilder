@@ -67,10 +67,12 @@ void		EditorState::InitElementPlacer()
 	Window	*win = mWindow;
 	float	*size = &mGridCellSize;
 	Element	**curr = &mSelectedElement;
-	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [list, win, size, curr] {
+	sf::Vector2f	*position = &mEditorPosition;
+	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [list, win, size, curr, position] {
 		if (!*curr)
 			return;
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*win->GetRenderWindow()));
+		pos += *position;
 		(*curr)->SetGridPosition(sf::Vector2i(pos.x / *size, pos.y / *size));
 		pos.x = pos.x - ((int)pos.x % (int)*size);
 		pos.y = pos.y - ((int)pos.y % (int)*size);
@@ -93,6 +95,7 @@ void		EditorState::Init(Data *tData)
 	 * INIT STATE AND GUI
 	 **/
 	InitGUI();
+	InputManager::LoadDefaultKeyBindings();
 }
 
 void		EditorState::HandleEvents()
@@ -100,6 +103,7 @@ void		EditorState::HandleEvents()
 	sf::Event event;
 	while (mWindow->HandleEvent(event))
 	{
+		InputManager::HandleInput(event);
 		if (event.type == sf::Event::Resized)
 			mWindow->ResetView(true);
 		mf::GUI::HandleEvent(event);
@@ -122,7 +126,15 @@ void		EditorState::Update()
 		mElementEditor->AddWidget(img);
 		mPreviousSelectedElement = mSelectedElement;
 	}
-	
+	if (InputManager::IsActive(InputAction::MOVE_LEFT))
+		mEditorPosition.x -= mGridCellSize / 64.f;
+	if (InputManager::IsActive(InputAction::MOVE_RIGHT))
+		mEditorPosition.x += mGridCellSize / 64.f;
+	if (InputManager::IsActive(InputAction::MOVE_DOWN))
+		mEditorPosition.y += mGridCellSize / 64.f;
+	if (InputManager::IsActive(InputAction::MOVE_UP))
+		mEditorPosition.y -= mGridCellSize / 64.f;
+
 }
 
 void		EditorState::Render()
@@ -132,10 +144,13 @@ void		EditorState::Render()
 	//RENDER YOUR STUFF
 	
 	mf::GUI::Render();
-	mWindow->SetView(*mEditor->GetView(mWindow->GetRenderWindow()));
+	mView = *mEditor->GetView(mWindow->GetRenderWindow());
+	mView.setCenter((mEditorPosition) + (mEditor->GetSize() / 2.f) + mEditor->GetPosition());
+	mWindow->SetView(mView);
 	RenderMap();
 	if (mGridActive)
 		RenderGrid();
+	
 	mWindow->ResetView(true);
 
 	mWindow->Render();

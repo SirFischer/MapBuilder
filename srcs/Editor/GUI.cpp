@@ -91,7 +91,7 @@ void			EditorState::InitTextureLoader()
 	std::string path = mData->mProfile.GetAssetsPath();
 	btn->SetClickEvent([path]{
 		#ifdef WIN32
-
+			
 		#else
 			if (std::system(std::string("xdg-open " + path).c_str()))
 			{

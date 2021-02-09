@@ -8,6 +8,7 @@
 #include "EditorWidget.hpp"
 #include "Element.hpp"
 #include "ResourceManager.hpp"
+#include "InputManager.hpp"
 
 #define DEFAULT_RESOURCES "assets/defaultResources"
 
@@ -23,6 +24,9 @@ private:
 	std::vector<Element>	mElementList;
 	std::list<Element>		mMapElements;
 	sf::Sprite				mBlockSprite;
+
+	sf::Vector2f			mEditorPosition = sf::Vector2f(0, 0);
+	sf::View				mView;
 
 	/**
 	 * Options
