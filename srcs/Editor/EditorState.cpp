@@ -126,6 +126,19 @@ void		EditorState::Update()
 		mElementEditor->AddWidget(img);
 		mPreviousSelectedElement = mSelectedElement;
 	}
+	if (mSelectedElement)
+	{
+		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*(mWindow->GetRenderWindow())));
+		pos += mEditorPosition;
+		pos.x -= ((int)pos.x % (int)mGridCellSize);
+		pos.y -= ((int)pos.y % (int)mGridCellSize);
+		mPhantomSprite.setPosition(pos);
+		sf::Texture		*texture = ResourceManager::LoadTexture(mSelectedElement->GetPath());
+		mPhantomSprite.setTexture(*texture);
+		mPhantomSprite.setScale(sf::Vector2f(mGridCellSize / texture->getSize().x, mGridCellSize / texture->getSize().y));
+		mPhantomSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
+		mPhantomSprite.setColor(sf::Color(255, 255, 255, 100));
+	}
 	if (InputManager::IsActive(InputAction::MOVE_LEFT))
 		mEditorPosition.x -= mGridCellSize / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_RIGHT))
@@ -150,7 +163,7 @@ void		EditorState::Render()
 	RenderMap();
 	if (mGridActive)
 		RenderGrid();
-	
+	mWindow->Draw(mPhantomSprite);
 	mWindow->ResetView(true);
 
 	mWindow->Render();

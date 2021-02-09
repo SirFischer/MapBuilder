@@ -24,6 +24,7 @@ private:
 	std::vector<Element>	mElementList;
 	std::list<Element>		mMapElements;
 	sf::Sprite				mBlockSprite;
+	sf::Sprite				mPhantomSprite;
 
 	sf::Vector2f			mEditorPosition = sf::Vector2f(0, 0);
 	sf::View				mView;
