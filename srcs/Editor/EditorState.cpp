@@ -159,12 +159,16 @@ void		EditorState::Render()
 	
 	mf::GUI::Render();
 	mView = *mEditor->GetView(mWindow->GetRenderWindow());
+	
 	mView.setCenter((mEditorPosition) + (mEditor->GetSize() / 2.f) + mEditor->GetPosition());
 	mWindow->SetView(mView);
 	RenderMap();
+	mWindow->Draw(mPhantomSprite);
+	mView.setCenter((mEditor->GetSize().x / 2.f) + mEditor->GetPosition().x, (mEditor->GetSize().y / 2.f) + mEditor->GetPosition().y);
+	mWindow->SetView(mView);
 	if (mGridActive)
 		RenderGrid();
-	mWindow->Draw(mPhantomSprite);
+	
 	mWindow->ResetView(true);
 
 	mWindow->Render();
@@ -172,8 +176,9 @@ void		EditorState::Render()
 
 void		EditorState::RenderGrid()
 {
-	float	x = 0;
-	float	y = 0;
+	float	x = - ((int)mEditorPosition.x % (int)mGridCellSize);
+	float	y = - ((int)mEditorPosition.y % (int)mGridCellSize);
+;
 
 	while (y < mWindow->GetSize().y)
 	{
