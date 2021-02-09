@@ -130,9 +130,10 @@ void		EditorState::Update()
 	{
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*(mWindow->GetRenderWindow())));
 		pos += mEditorPosition;
-		pos.x -= ((int)pos.x % (int)mGridCellSize);
-		pos.y -= ((int)pos.y % (int)mGridCellSize);
-		mPhantomSprite.setPosition(pos);
+		pos.x /= mGridCellSize;
+		pos.y /= mGridCellSize;
+		
+		mPhantomSprite.setPosition((int)pos.x * mGridCellSize, (int)pos.y * mGridCellSize);
 		sf::Texture		*texture = ResourceManager::LoadTexture(mSelectedElement->GetPath());
 		mPhantomSprite.setTexture(*texture);
 		mPhantomSprite.setScale(sf::Vector2f(mGridCellSize / texture->getSize().x, mGridCellSize / texture->getSize().y));
