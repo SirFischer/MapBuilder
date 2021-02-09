@@ -20,6 +20,12 @@ void		EditorState::InitTextures()
 	->SetContentOverflow(mf::List::eOverflow::WRAP)
 	->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
 	mOptions->AddWidget(mTextures);
+	LoadTextures();
+}
+
+void		EditorState::LoadTextures()
+{
+	mTextures->ClearWidgets();
 	Element	**elementCurrent = &mSelectedElement;
 	for (const auto &entry : std::filesystem::directory_iterator(DEFAULT_RESOURCES))
 	{
@@ -42,6 +48,7 @@ void		EditorState::InitTextures()
 		mTextures->AddWidget(btn);
 	}
 }
+
 
 void		EditorState::InitElementPlacer()
 {

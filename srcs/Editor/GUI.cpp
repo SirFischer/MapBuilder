@@ -40,13 +40,15 @@ void		EditorState::InitBackButton()
 
 void		EditorState::InitOptions()
 {
+	mOptions->ClearWidgets();
 	InitTextures();
+	InitTextureLoader();
 	InitElementEditor();
 	InitGridActivationButton();
 	mf::Text	*gridSizeSliderLabel = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Grid Size:");
 	gridSizeSliderLabel->SetBackgroundColor(sf::Color::Transparent);
-	gridSizeSliderLabel->SetCharacterSize(20);
-	gridSizeSliderLabel->SetSize(200, 30);
+	gridSizeSliderLabel->SetCharacterSize(15);
+	gridSizeSliderLabel->SetSize(200, 20);
 	mOptions->AddWidget(gridSizeSliderLabel);
 	mGridSizeSlider = mf::Slider::Create();
 	mGridSizeSlider->SetSize(300, 30);
@@ -68,6 +70,38 @@ void			EditorState::InitGridActivationButton()
 	});
 	mOptions->AddWidget(btn);
 }
+
+void			EditorState::InitTextureLoader()
+{
+	mf::List	*textureLoaderList = mf::List::Create();
+	textureLoaderList->SetItemDirection(mf::List::eListDirection::HORIZONTAL);
+	textureLoaderList->SetSize(95, 5)->SetSizePercentage(true);
+	textureLoaderList->SetBackgroundColor(sf::Color::Transparent);
+	mOptions->AddWidget(textureLoaderList);
+	mf::Button	*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(50, 30);
+	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Reload")->SetCharacterSize(10)->SetTextColor(sf::Color::Black);
+	btn->SetClickEvent([this]{
+		this->LoadTextures();
+	});
+	textureLoaderList->AddWidget(btn);
+	btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(70, 30);
+	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Open folder")->SetCharacterSize(10)->SetTextColor(sf::Color::Black);
+	btn->SetClickEvent([]{
+		#ifdef WIN32
+
+		#else
+			if (std::system("xdg-open assets/defaultResources"))
+			{
+				std::system("dolphin assets/defaultResources");
+			}
+		#endif
+	});
+	textureLoaderList->AddWidget(btn);
+	
+}
+
 
 void			EditorState::InitElementEditor()
 {

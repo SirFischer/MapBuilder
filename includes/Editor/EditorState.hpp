@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <list>
+#include <cstdlib>
 
 #include "State.hpp"
 #include "EditorWidget.hpp"
@@ -43,6 +44,7 @@ private:
 	void			InitOptions();
 	void			InitGridActivationButton();
 	void			InitTextures();
+	void			InitTextureLoader();
 	void			InitElementEditor();
 	void			InitElementPlacer();
 public:
@@ -53,5 +55,7 @@ public:
 	void			HandleEvents();
 	void			Update();
 	void			Render();
+	
+	void			LoadTextures();
 };
 
