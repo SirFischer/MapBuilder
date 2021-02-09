@@ -73,6 +73,10 @@ void		EditorState::InitElementPlacer()
 			return;
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*win->GetRenderWindow()));
 		pos += *position;
+		if (pos.x <= 0)
+			pos.x -= *size;
+		if (pos.y <= 0)
+			pos.y -= *size;
 		(*curr)->SetGridPosition(sf::Vector2i(pos.x / *size, pos.y / *size));
 		pos.x = pos.x - ((int)pos.x % (int)*size);
 		pos.y = pos.y - ((int)pos.y % (int)*size);
@@ -130,6 +134,10 @@ void		EditorState::Update()
 	{
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*(mWindow->GetRenderWindow())));
 		pos += mEditorPosition;
+		if (pos.x <= 0)
+			pos.x -= mGridCellSize;
+		if (pos.y <= 0)
+			pos.y -= mGridCellSize;
 		pos.x /= mGridCellSize;
 		pos.y /= mGridCellSize;
 		
@@ -176,9 +184,8 @@ void		EditorState::Render()
 
 void		EditorState::RenderGrid()
 {
-	float	x = - ((int)mEditorPosition.x % (int)mGridCellSize);
-	float	y = - ((int)mEditorPosition.y % (int)mGridCellSize);
-;
+	float	x = -((int)(mEditorPosition.x * 100.f) % (int)(mGridCellSize * 100.f)) / 100.f;
+	float	y = -((int)(mEditorPosition.y * 100.f) % (int)(mGridCellSize * 100.f)) / 100.f;
 
 	while (y < mWindow->GetSize().y)
 	{

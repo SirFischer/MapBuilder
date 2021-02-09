@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <list>
 #include <cstdlib>
+#include <math.h>
 
 #include "State.hpp"
 #include "EditorWidget.hpp"
