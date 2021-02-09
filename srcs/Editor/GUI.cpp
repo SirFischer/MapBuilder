@@ -88,13 +88,14 @@ void			EditorState::InitTextureLoader()
 	btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
 	btn->SetSize(70, 30);
 	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Open folder")->SetCharacterSize(10)->SetTextColor(sf::Color::Black);
-	btn->SetClickEvent([]{
+	std::string path = mData->mProfile.GetAssetsPath();
+	btn->SetClickEvent([path]{
 		#ifdef WIN32
 
 		#else
-			if (std::system("xdg-open assets/defaultResources"))
+			if (std::system(std::string("xdg-open " + path).c_str()))
 			{
-				std::system("dolphin assets/defaultResources");
+				std::system(std::string("dolphin " + path).c_str());
 			}
 		#endif
 	});

@@ -47,6 +47,7 @@ private:
 	void			InitTextureLoader();
 	void			InitElementEditor();
 	void			InitElementPlacer();
+	void			LoadTexturesFromFolder(std::string tPath);
 public:
 	EditorState(Window *tWindow);
 	~EditorState();

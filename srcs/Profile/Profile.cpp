@@ -34,6 +34,10 @@ void			Profile::Load()
 		{
 			std::getline(ss, token, '=');
 			mMaps.push_back(token);
+		}else if (token.find("assets") != std::string::npos)
+		{
+			std::getline(ss, token, '=');
+			mAssets = token;
 		}
 	}
 }

@@ -26,10 +26,20 @@ void		EditorState::InitTextures()
 void		EditorState::LoadTextures()
 {
 	mTextures->ClearWidgets();
+	LoadTexturesFromFolder(DEFAULT_RESOURCES);
+	LoadTexturesFromFolder(mData->mProfile.GetAssetsPath());
+}
+
+void		EditorState::LoadTexturesFromFolder(std::string tPath)
+{
 	Element	**elementCurrent = &mSelectedElement;
-	for (const auto &entry : std::filesystem::directory_iterator(DEFAULT_RESOURCES))
+	if (!std::filesystem::exists(tPath))
+		return ;
+	for (const auto &entry : std::filesystem::directory_iterator(tPath))
 	{
 		//LOAD DEFAULT TEXTURES
+		if (!entry.exists())
+			break ;
 		mElementList.push_back(Element(entry.path()));
 		mf::Button	*btn = mf::Button::Create(entry.path(), entry.path());
 		btn->SetSize(sf::Vector2f(50, 50))
@@ -48,6 +58,7 @@ void		EditorState::LoadTextures()
 		mTextures->AddWidget(btn);
 	}
 }
+
 
 
 void		EditorState::InitElementPlacer()
@@ -161,6 +172,7 @@ void		EditorState::RenderMap()
 			mBlockSprite.setTexture(*texture);
 			mBlockSprite.setPosition(sf::Vector2f(i.GetGridPosition().x * mGridCellSize, i.GetGridPosition().y * mGridCellSize));
 			mBlockSprite.setScale(sf::Vector2f(mGridCellSize / texture->getSize().x, mGridCellSize / texture->getSize().y));
+			mBlockSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
 			mWindow->Draw(mBlockSprite);
 		}
 	}
