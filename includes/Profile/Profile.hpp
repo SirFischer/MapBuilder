@@ -6,6 +6,9 @@
 #include <sstream>
 #include <vector>
 
+#define PROFILE_PATH "assets/profiles/"
+#define PROFILE_RESOURCE_PATH "assets/profileAssets/"
+
 class Profile
 {
 private:
@@ -20,6 +23,14 @@ public:
 	Profile(std::string tPath);
 	~Profile();
 
+	void						SaveToFile();
+
+	/**
+	 * Setters
+	 **/
+	void						SetAssetsPath(std::string tPath) {mAssets = tPath;}
+	void						SetName(std::string tName) {mName = tName;}
+	
 	/**
 	 * Getters
 	 **/

@@ -10,7 +10,10 @@ class ProfileState : public State
 private:
 	void		InitMapList();
 	void		InitBackButton();
+	void		InitSaveButton();
     void		InitUI();
+
+	mf::Text	*mNameText;
 	
 public:
     ProfileState(Window *tWindow);

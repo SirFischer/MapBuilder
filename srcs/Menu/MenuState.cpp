@@ -11,6 +11,7 @@ MenuState::~MenuState()
 
 void		MenuState::LoadMenu()
 {
+	Data		*data = mData;
 	mf::Text	*text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Welcome to the map builder, create or select a profile to start editing some maps...");
 	text->SetBackgroundColor(sf::Color::Transparent);
 	text->SetSize(90, 10)->SetSizePercentage(true);
@@ -33,6 +34,19 @@ void		MenuState::LoadMenu()
 	createButton->SetSize(90, 7)->SetSizePercentage(true);
 	createButton->SetText("Create new profile")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
 	createButton->SetCharacterSize(20);
+	createButton->SetClickEvent([active, action, data]{
+		
+		time_t	t = time(0);
+		int random = rand() % 100;
+		std::string path = std::string(PROFILE_PATH) + std::to_string(t) + std::to_string(random) + ".profile";
+		std::filesystem::create_directory(PROFILE_RESOURCE_PATH + std::to_string(t) + std::to_string(random));
+		Profile	profile(path);
+		profile.SetAssetsPath(PROFILE_RESOURCE_PATH + std::to_string(t) + std::to_string(random));
+		profile.SaveToFile();
+		data->mProfile = profile;
+		*active = false;
+		*action = StateAction::PROFILE;
+	});
 	mMenuList->AddWidget(createButton);
 }
 

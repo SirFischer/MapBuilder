@@ -15,6 +15,18 @@ Profile::~Profile()
 {
 }
 
+void			Profile::SaveToFile()
+{
+	std::fstream		profileFile;
+
+	profileFile.open(mPath, std::ios::out);
+	profileFile << "name=" + mName + "\n";
+	profileFile << "assets=" + mAssets + "\n";
+	for (auto &map : mMaps)
+		profileFile << "map=" << map << "\n";
+	profileFile.close();
+}
+
 void			Profile::Load()
 {
 	std::fstream		profileFile;

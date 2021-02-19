@@ -12,6 +12,7 @@
 #include "InputManager.hpp"
 
 #define DEFAULT_RESOURCES "assets/defaultResources"
+#define GRID_SIZE	100.f
 
 class EditorState : public State
 {
@@ -29,18 +30,17 @@ private:
 
 	sf::Vector2f			mEditorPosition = sf::Vector2f(0, 0);
 	sf::View				mView;
+	float					mZoom = 1.f;
 
 	/**
 	 * Options
 	 **/
 	
-	mf::Slider		*mGridSizeSlider;
 
 	/*********/
 
 	sf::Vertex		mLine[2];
 	bool			mGridActive = true;
-	float			mGridCellSize = 50.f;
 
 	void			RenderGrid();
 	void			RenderMap();

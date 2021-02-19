@@ -35,6 +35,8 @@ int			InputManager::GetKeyBinding(InputAction tAction)
 
 void		InputManager::HandleInput(sf::Event	&tEvent)
 {
+	mActionMap[InputAction::SCROLL_DOWN] = false;
+	mActionMap[InputAction::SCROLL_UP] = false;
 	switch (tEvent.type)
 	{
 	case sf::Event::KeyPressed:
@@ -42,6 +44,9 @@ void		InputManager::HandleInput(sf::Event	&tEvent)
 		break;
 	case sf::Event::KeyReleased:
 		HandleKeyRelease(tEvent);
+		break;
+	case sf::Event::MouseWheelScrolled:
+		mActionMap[(tEvent.mouseWheelScroll.delta == 1) ? InputAction::SCROLL_UP : InputAction::SCROLL_DOWN] = true;
 		break;
 	default:
 		break;

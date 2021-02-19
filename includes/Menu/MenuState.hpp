@@ -1,6 +1,8 @@
 #pragma once
 
 #include <filesystem>
+#include <time.h>
+#include <random>
 
 #include "State.hpp"
 #include "ResourceManager.hpp"

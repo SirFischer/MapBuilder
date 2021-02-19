@@ -65,21 +65,20 @@ void		EditorState::InitElementPlacer()
 {
 	std::list<Element>	*list = &mMapElements;
 	Window	*win = mWindow;
-	float	*size = &mGridCellSize;
 	Element	**curr = &mSelectedElement;
 	sf::Vector2f	*position = &mEditorPosition;
-	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [list, win, size, curr, position] {
+	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [list, win, curr, position] {
 		if (!*curr)
 			return;
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*win->GetRenderWindow()));
 		pos += *position;
 		if (pos.x <= 0)
-			pos.x -= *size;
+			pos.x -= GRID_SIZE;
 		if (pos.y <= 0)
-			pos.y -= *size;
-		(*curr)->SetGridPosition(sf::Vector2i(pos.x / *size, pos.y / *size));
-		pos.x = pos.x - ((int)pos.x % (int)*size);
-		pos.y = pos.y - ((int)pos.y % (int)*size);
+			pos.y -= GRID_SIZE;
+		(*curr)->SetGridPosition(sf::Vector2i(pos.x / GRID_SIZE, pos.y / GRID_SIZE));
+		pos.x = pos.x - ((int)pos.x % (int)GRID_SIZE);
+		pos.y = pos.y - ((int)pos.y % (int)GRID_SIZE);
 		(*curr)->SetPosition(pos);
 		list->push_back(**curr);
 		std::cout << "block added to: " << pos.x  << " - " << pos.y << '\n';
@@ -120,7 +119,6 @@ void		EditorState::HandleEvents()
 
 void		EditorState::Update()
 {
-	mGridCellSize = (std::clamp(mGridSizeSlider->GetValue(), 0.f, 1.f) * 100) + 10;
 	if (mSelectedElement != NULL && mSelectedElement != mPreviousSelectedElement)
 	{
 		mElementEditor->ClearWidgets();
@@ -135,39 +133,36 @@ void		EditorState::Update()
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*(mWindow->GetRenderWindow())));
 		pos += mEditorPosition;
 		if (pos.x <= 0)
-			pos.x -= mGridCellSize;
+			pos.x -= GRID_SIZE;
 		if (pos.y <= 0)
-			pos.y -= mGridCellSize;
-		pos.x /= mGridCellSize;
-		pos.y /= mGridCellSize;
+			pos.y -= GRID_SIZE;
+		pos.x /= GRID_SIZE;
+		pos.y /= GRID_SIZE;
 		
-		mPhantomSprite.setPosition((int)pos.x * mGridCellSize, (int)pos.y * mGridCellSize);
+		mPhantomSprite.setPosition((int)pos.x * GRID_SIZE, (int)pos.y * GRID_SIZE);
 		sf::Texture		*texture = ResourceManager::LoadTexture(mSelectedElement->GetPath());
 		mPhantomSprite.setTexture(*texture);
-		mPhantomSprite.setScale(sf::Vector2f(mGridCellSize / texture->getSize().x, mGridCellSize / texture->getSize().y));
+		mPhantomSprite.setScale(sf::Vector2f(GRID_SIZE / texture->getSize().x, GRID_SIZE / texture->getSize().y));
 		mPhantomSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
 		mPhantomSprite.setColor(sf::Color(255, 255, 255, 100));
 	}
 	if (InputManager::IsActive(InputAction::MOVE_LEFT))
-		mEditorPosition.x -= mGridCellSize / 64.f;
+		mEditorPosition.x -= GRID_SIZE / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_RIGHT))
-		mEditorPosition.x += mGridCellSize / 64.f;
+		mEditorPosition.x += GRID_SIZE / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_DOWN))
-		mEditorPosition.y += mGridCellSize / 64.f;
+		mEditorPosition.y += GRID_SIZE / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_UP))
-		mEditorPosition.y -= mGridCellSize / 64.f;
-
+		mEditorPosition.y -= GRID_SIZE / 64.f;
 }
 
 void		EditorState::Render()
 {
 	mWindow->Clear(sf::Color(100, 100, 100, 255));
-
-	//RENDER YOUR STUFF
 	
 	mf::GUI::Render();
 	mView = *mEditor->GetView(mWindow->GetRenderWindow());
-	
+	mView.zoom(mZoom);
 	mView.setCenter((mEditorPosition) + (mEditor->GetSize() / 2.f) + mEditor->GetPosition());
 	mWindow->SetView(mView);
 	RenderMap();
@@ -184,22 +179,22 @@ void		EditorState::Render()
 
 void		EditorState::RenderGrid()
 {
-	float	x = -((int)(mEditorPosition.x * 100.f) % (int)(mGridCellSize * 100.f)) / 100.f;
-	float	y = -((int)(mEditorPosition.y * 100.f) % (int)(mGridCellSize * 100.f)) / 100.f;
+	float	x = -((int)(mEditorPosition.x * 100.f) % (int)(GRID_SIZE * 100.f)) / 100.f;
+	float	y = -((int)(mEditorPosition.y * 100.f) % (int)(GRID_SIZE * 100.f)) / 100.f;
 
 	while (y < mWindow->GetSize().y)
 	{
 		mLine[0].position = sf::Vector2f(0, y);
 		mLine[1].position = sf::Vector2f(mWindow->GetSize().x, y);
 		mWindow->Draw(mLine, 2, sf::Lines);
-		y += mGridCellSize;
+		y += GRID_SIZE;
 	}
 	while (x < mWindow->GetSize().x)
 	{
 		mLine[0].position = sf::Vector2f(x, 0);
 		mLine[1].position = sf::Vector2f(x, mWindow->GetSize().y);
 		mWindow->Draw(mLine, 2, sf::Lines);
-		x += mGridCellSize;
+		x += GRID_SIZE;
 	}
 }
 
@@ -211,8 +206,8 @@ void		EditorState::RenderMap()
 		if (texture)
 		{
 			mBlockSprite.setTexture(*texture);
-			mBlockSprite.setPosition(sf::Vector2f(i.GetGridPosition().x * mGridCellSize, i.GetGridPosition().y * mGridCellSize));
-			mBlockSprite.setScale(sf::Vector2f(mGridCellSize / texture->getSize().x, mGridCellSize / texture->getSize().y));
+			mBlockSprite.setPosition(sf::Vector2f(i.GetGridPosition().x * GRID_SIZE, i.GetGridPosition().y * GRID_SIZE));
+			mBlockSprite.setScale(sf::Vector2f(GRID_SIZE / texture->getSize().x, GRID_SIZE / texture->getSize().y));
 			mBlockSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
 			mWindow->Draw(mBlockSprite);
 		}

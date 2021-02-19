@@ -54,20 +54,36 @@ void		ProfileState::InitBackButton()
 	mf::GUI::AddWidget(btn);
 }
 
+void		ProfileState::InitSaveButton()
+{
+	Data			*data = mData;
+	mf::Text		*text = mNameText;
+	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(100, 40);
+	btn->SetPosition(10, 94)->SetPositionPercentage(true);
+	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Save")->SetCharacterSize(15)
+	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetClickEvent([data, text]{
+		data->mProfile.SetName(text->GetString());
+		data->mProfile.SaveToFile();
+	});
+	mf::GUI::AddWidget(btn);
+}
 
 void		ProfileState::InitUI()
 {
 	
 	mf::GUI::ClearWidgets();
-	mf::Text	*nameText = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", mData->mProfile.GetName());
-	nameText->SetTextColor(sf::Color::White);
-	nameText->SetBackgroundColor(sf::Color::Transparent)->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1);
-	nameText->SetPosition(10, 70)->SetSize(400, 40);
-	nameText->EnableEdit()->SetMaxTextLength(20);
-	mf::GUI::AddWidget(nameText);
+	mNameText = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", mData->mProfile.GetName());
+	mNameText->SetTextColor(sf::Color::White);
+	mNameText->SetBackgroundColor(sf::Color::Transparent)->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1);
+	mNameText->SetPosition(10, 70)->SetSize(400, 40);
+	mNameText->EnableEdit()->SetMaxTextLength(20);
+	mf::GUI::AddWidget(mNameText);
 
 	InitBackButton();
 	InitMapList();
+	InitSaveButton();
 }
 
 void		ProfileState::Init(Data *tData)

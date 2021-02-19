@@ -45,16 +45,6 @@ void		EditorState::InitOptions()
 	InitTextureLoader();
 	InitElementEditor();
 	InitGridActivationButton();
-	mf::Text	*gridSizeSliderLabel = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Grid Size:");
-	gridSizeSliderLabel->SetBackgroundColor(sf::Color::Transparent);
-	gridSizeSliderLabel->SetCharacterSize(15);
-	gridSizeSliderLabel->SetSize(200, 20);
-	mOptions->AddWidget(gridSizeSliderLabel);
-	mGridSizeSlider = mf::Slider::Create();
-	mGridSizeSlider->SetSize(300, 30);
-	mGridSizeSlider->SetValue(0.5);
-	mGridSizeSlider->GetButton()->SetSize(sf::Vector2f(30, 30));
-	mOptions->AddWidget(mGridSizeSlider);
 }
 
 
