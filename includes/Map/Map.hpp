@@ -8,6 +8,8 @@
 
 #include "ExportFormat.hpp"
 
+#define MAP_PATH "assets/maps/"
+
 class Map
 {
 private:
@@ -20,6 +22,8 @@ public:
 	Map(std::string tPath);
 	Map();
 	~Map();
+
+	void						SaveToFile();
 
 	/**
 	 * Getters

@@ -36,3 +36,13 @@ void	Map::Load()
 		}
 	}
 }
+
+void		Map::SaveToFile()
+{
+	std::fstream		mapFile;
+
+	mapFile.open(mPath, std::ios::out);
+	mapFile << "name=" + mName + "\n";
+	mapFile << "format=" + std::to_string((unsigned int)mFormat) + "\n";
+	mapFile.close();
+}

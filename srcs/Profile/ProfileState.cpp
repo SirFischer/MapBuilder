@@ -70,6 +70,31 @@ void		ProfileState::InitSaveButton()
 	mf::GUI::AddWidget(btn);
 }
 
+void		ProfileState::InitCreateButton()
+{
+	Data			*data = mData;
+	StateAction		*stateReturnAction = &mStateReturnAction;
+	bool			*isRunning = &mIsActive;
+	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(200, 40);
+	btn->SetPosition(80, 44)->SetPositionPercentage(true);
+	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Create new map...")->SetCharacterSize(15)
+	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetClickEvent([data, stateReturnAction, isRunning]{
+		time_t	t = time(0);
+		int random = rand() % 100;
+		std::string path = std::string(MAP_PATH) + std::to_string(t) + std::to_string(random) + ".map";
+		data->mProfile.AddMap(path);
+		data->mProfile.SaveToFile();
+		Map map(path);
+		map.SaveToFile();
+		data->mMap = map;
+		*stateReturnAction = StateAction::EDITOR;
+		*isRunning = false;
+	});
+	mf::GUI::AddWidget(btn);
+}
+
 void		ProfileState::InitUI()
 {
 	
@@ -84,6 +109,7 @@ void		ProfileState::InitUI()
 	InitBackButton();
 	InitMapList();
 	InitSaveButton();
+	InitCreateButton();
 }
 
 void		ProfileState::Init(Data *tData)

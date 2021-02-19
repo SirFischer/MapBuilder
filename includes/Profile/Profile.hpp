@@ -30,6 +30,8 @@ public:
 	 **/
 	void						SetAssetsPath(std::string tPath) {mAssets = tPath;}
 	void						SetName(std::string tName) {mName = tName;}
+
+	void						AddMap(std::string tPath){mMaps.push_back(tPath);}
 	
 	/**
 	 * Getters
