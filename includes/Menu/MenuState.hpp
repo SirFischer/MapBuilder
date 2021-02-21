@@ -21,7 +21,6 @@ private:
 	 * UI
 	 **/
 	void		InitList();
-
 	void		InitUI();
 
 	mf::List	*mProfileList = NULL;

@@ -15,8 +15,11 @@ private:
 	void		InitBackButton();
 	void		InitSaveButton();
 	void		InitCreateButton();
+	void		InitConfirmBox();
+	void		InitDeleteButton();
     void		InitUI();
-
+	
+	mf::List	*mConfirmBox = NULL;
 	mf::Text	*mNameText;
 	
 public:

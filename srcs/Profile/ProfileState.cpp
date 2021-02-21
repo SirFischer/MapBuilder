@@ -77,7 +77,7 @@ void		ProfileState::InitCreateButton()
 	bool			*isRunning = &mIsActive;
 	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
 	btn->SetSize(200, 40);
-	btn->SetPosition(80, 44)->SetPositionPercentage(true);
+	btn->SetPosition(1, 85)->SetPositionPercentage(true);
 	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Create new map...")->SetCharacterSize(15)
 	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
 	btn->SetClickEvent([data, stateReturnAction, isRunning]{
@@ -110,6 +110,8 @@ void		ProfileState::InitUI()
 	InitMapList();
 	InitSaveButton();
 	InitCreateButton();
+	InitConfirmBox();
+	InitDeleteButton();
 }
 
 void		ProfileState::Init(Data *tData)
