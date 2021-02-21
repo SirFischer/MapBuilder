@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <filesystem>
 
 #define PROFILE_PATH "assets/profiles/"
 #define PROFILE_RESOURCE_PATH "assets/profileAssets/"
@@ -24,6 +25,7 @@ public:
 	~Profile();
 
 	void						SaveToFile();
+	void						Delete();
 
 	/**
 	 * Setters

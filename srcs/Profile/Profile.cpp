@@ -27,6 +27,15 @@ void			Profile::SaveToFile()
 	profileFile.close();
 }
 
+void			Profile::Delete()
+{
+	std::filesystem::remove_all(mAssets);
+	for (auto &map : mMaps)
+		std::filesystem::remove(map);
+	std::filesystem::remove(mPath);
+}
+
+
 void			Profile::Load()
 {
 	std::fstream		profileFile;

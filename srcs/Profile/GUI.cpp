@@ -29,8 +29,15 @@ void		ProfileState::InitConfirmBox()
 	btn->SetText("Delete")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
 	btn->SetSizePercentage(true)->SetSize(99, 30);
 	btn->SetCharacterSize(14);
-	btn->SetClickEvent([tmp]{
+
+	StateAction				*stateReturnAction = &mStateReturnAction;
+	bool					*isRunning = &mIsActive;
+	Data					*data = mData;
+	btn->SetClickEvent([tmp, stateReturnAction, isRunning, data]{
 		tmp->SetDisabled(true);
+		data->mProfile.Delete();
+		*stateReturnAction = StateAction::POP;
+		*isRunning = false;
 	});
 	mConfirmBox->AddWidget(btn);
 
