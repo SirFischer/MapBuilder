@@ -71,7 +71,9 @@ void			EditorState::InitTextureLoader()
 	mf::Button	*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
 	btn->SetSize(50, 30);
 	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Reload")->SetCharacterSize(10)->SetTextColor(sf::Color::Black);
-	btn->SetClickEvent([this]{
+	Element	**elem = &mSelectedElement; 
+	btn->SetClickEvent([this, elem]{
+		*elem = NULL;
 		this->LoadTextures();
 	});
 	textureLoaderList->AddWidget(btn);
