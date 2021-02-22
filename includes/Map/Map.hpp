@@ -31,6 +31,9 @@ private:
 	void				Load();
 	std::string			GetBasicFormat();
 	std::string			GetAdvancedFormat();
+
+	void				ReadBasicFormat(std::fstream &tFile);
+	void				ReadAdvancedFormat(std::fstream &tFile);
 	
 public:
 	Map(std::string tPath);

@@ -33,8 +33,24 @@ void	Map::Load()
 		{
 			std::getline(ss, token, '=');
 			mFormat = (ExportFormat)std::stoi(token);
+		} else if (token.find("signature") != std::string::npos)
+		{
+			std::getline(ss, token, '=');
+			std::stringstream ss2(token);
+			int		signature = (mFormat == ExportFormat::BASIC) ? (int)token[0] : std::stoi(token);
+			std::getline(ss2, token, ' ');
+			std::getline(ss2, token, ' ');
+			mSignatures[signature] = token;
+		}else if (token.find("map") != std::string::npos)
+		{
+			if (mFormat == ExportFormat::BASIC)
+				ReadBasicFormat(mapFile);
+			else
+				ReadAdvancedFormat(mapFile);
+			break;
 		}
 	}
+	mapFile.close();
 }
 
 
@@ -90,6 +106,39 @@ std::string	Map::GetAdvancedFormat()
 {
 	return ("");
 }
+
+void		Map::ReadBasicFormat(std::fstream &tFile)
+{
+	std::string			line;
+
+	int y = 0;
+	while (std::getline(tFile, line))
+	{
+		y++;
+		int x = 0;
+		for (auto &i : line)
+		{
+			x++;
+			if (i == ' ')
+				continue;
+			Element elem(mSignatures[i]);
+			elem.SetGridPosition(sf::Vector2i(x, y));
+			elem.SetPosition(sf::Vector2f(x * BLOCK_SIZE, y * BLOCK_SIZE));
+			mElements.push_back(elem);
+		}
+	}
+}
+
+void		Map::ReadAdvancedFormat(std::fstream &tFile)
+{
+	std::string			line;
+
+	while (std::getline(tFile, line))
+	{
+
+	}
+}
+
 
 
 void		Map::SaveToFile()
