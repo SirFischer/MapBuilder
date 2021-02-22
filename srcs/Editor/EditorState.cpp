@@ -63,25 +63,33 @@ void		EditorState::LoadTexturesFromFolder(std::string tPath)
 
 void		EditorState::InitElementPlacer()
 {
-	std::list<Element>	*list = &mMapElements;
+	Map	*map = &mData->mMap;
 	Window	*win = mWindow;
 	Element	**curr = &mSelectedElement;
 	sf::Vector2f	*position = &mEditorPosition;
-	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [list, win, curr, position] {
+	mEditor->SetEventListener(mf::eEvent::LEFT_CLICK, [map, win, curr, position] {
 		if (!*curr)
 			return;
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*win->GetRenderWindow()));
 		pos += *position;
 		if (pos.x <= 0)
-			pos.x -= GRID_SIZE;
+			pos.x -= BLOCK_SIZE;
 		if (pos.y <= 0)
-			pos.y -= GRID_SIZE;
-		(*curr)->SetGridPosition(sf::Vector2i(pos.x / GRID_SIZE, pos.y / GRID_SIZE));
-		pos.x = pos.x - ((int)pos.x % (int)GRID_SIZE);
-		pos.y = pos.y - ((int)pos.y % (int)GRID_SIZE);
+			pos.y -= BLOCK_SIZE;
+		(*curr)->SetGridPosition(sf::Vector2i(pos.x / BLOCK_SIZE, pos.y / BLOCK_SIZE));
+		pos.x = pos.x - ((int)pos.x % (int)BLOCK_SIZE);
+		pos.y = pos.y - ((int)pos.y % (int)BLOCK_SIZE);
 		(*curr)->SetPosition(pos);
-		list->push_back(**curr);
-		std::cout << "block added to: " << pos.x  << " - " << pos.y << '\n';
+		map->AddElement(*curr);
+	});
+	mEditor->SetEventListener(mf::eEvent::RIGHT_CLICK, [map, win, position] {
+		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*win->GetRenderWindow()));
+		pos += *position;
+		if (pos.x <= 0)
+			pos.x -= BLOCK_SIZE;
+		if (pos.y <= 0)
+			pos.y -= BLOCK_SIZE;
+		map->RemoveElement(sf::Vector2i(pos.x / BLOCK_SIZE, pos.y / BLOCK_SIZE));
 	});
 }
 
@@ -133,27 +141,27 @@ void		EditorState::Update()
 		sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*(mWindow->GetRenderWindow())));
 		pos += mEditorPosition;
 		if (pos.x <= 0)
-			pos.x -= GRID_SIZE;
+			pos.x -= BLOCK_SIZE;
 		if (pos.y <= 0)
-			pos.y -= GRID_SIZE;
-		pos.x /= GRID_SIZE;
-		pos.y /= GRID_SIZE;
+			pos.y -= BLOCK_SIZE;
+		pos.x /= BLOCK_SIZE;
+		pos.y /= BLOCK_SIZE;
 		
-		mPhantomSprite.setPosition((int)pos.x * GRID_SIZE, (int)pos.y * GRID_SIZE);
+		mPhantomSprite.setPosition((int)pos.x * BLOCK_SIZE, (int)pos.y * BLOCK_SIZE);
 		sf::Texture		*texture = ResourceManager::LoadTexture(mSelectedElement->GetPath());
 		mPhantomSprite.setTexture(*texture);
-		mPhantomSprite.setScale(sf::Vector2f(GRID_SIZE / texture->getSize().x, GRID_SIZE / texture->getSize().y));
+		mPhantomSprite.setScale(sf::Vector2f(BLOCK_SIZE / texture->getSize().x, BLOCK_SIZE / texture->getSize().y));
 		mPhantomSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
 		mPhantomSprite.setColor(sf::Color(255, 255, 255, 100));
 	}
 	if (InputManager::IsActive(InputAction::MOVE_LEFT))
-		mEditorPosition.x -= GRID_SIZE / 64.f;
+		mEditorPosition.x -= BLOCK_SIZE / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_RIGHT))
-		mEditorPosition.x += GRID_SIZE / 64.f;
+		mEditorPosition.x += BLOCK_SIZE / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_DOWN))
-		mEditorPosition.y += GRID_SIZE / 64.f;
+		mEditorPosition.y += BLOCK_SIZE / 64.f;
 	if (InputManager::IsActive(InputAction::MOVE_UP))
-		mEditorPosition.y -= GRID_SIZE / 64.f;
+		mEditorPosition.y -= BLOCK_SIZE / 64.f;
 }
 
 void		EditorState::Render()
@@ -165,7 +173,7 @@ void		EditorState::Render()
 	mView.zoom(mZoom);
 	mView.setCenter((mEditorPosition) + (mEditor->GetSize() / 2.f) + mEditor->GetPosition());
 	mWindow->SetView(mView);
-	RenderMap();
+	mData->mMap.Render(mWindow);
 	mWindow->Draw(mPhantomSprite);
 	mView.setCenter((mEditor->GetSize().x / 2.f) + mEditor->GetPosition().x, (mEditor->GetSize().y / 2.f) + mEditor->GetPosition().y);
 	mWindow->SetView(mView);
@@ -179,37 +187,21 @@ void		EditorState::Render()
 
 void		EditorState::RenderGrid()
 {
-	float	x = -((int)(mEditorPosition.x * 100.f) % (int)(GRID_SIZE * 100.f)) / 100.f;
-	float	y = -((int)(mEditorPosition.y * 100.f) % (int)(GRID_SIZE * 100.f)) / 100.f;
+	float	x = -((int)(mEditorPosition.x * 100.f) % (int)(BLOCK_SIZE * 100.f)) / 100.f;
+	float	y = -((int)(mEditorPosition.y * 100.f) % (int)(BLOCK_SIZE * 100.f)) / 100.f;
 
 	while (y < mWindow->GetSize().y)
 	{
 		mLine[0].position = sf::Vector2f(0, y);
 		mLine[1].position = sf::Vector2f(mWindow->GetSize().x, y);
 		mWindow->Draw(mLine, 2, sf::Lines);
-		y += GRID_SIZE;
+		y += BLOCK_SIZE;
 	}
 	while (x < mWindow->GetSize().x)
 	{
 		mLine[0].position = sf::Vector2f(x, 0);
 		mLine[1].position = sf::Vector2f(x, mWindow->GetSize().y);
 		mWindow->Draw(mLine, 2, sf::Lines);
-		x += GRID_SIZE;
-	}
-}
-
-void		EditorState::RenderMap()
-{
-	for (auto &i : mMapElements)
-	{
-		sf::Texture	*texture = ResourceManager::LoadTexture(i.GetPath());
-		if (texture)
-		{
-			mBlockSprite.setTexture(*texture);
-			mBlockSprite.setPosition(sf::Vector2f(i.GetGridPosition().x * GRID_SIZE, i.GetGridPosition().y * GRID_SIZE));
-			mBlockSprite.setScale(sf::Vector2f(GRID_SIZE / texture->getSize().x, GRID_SIZE / texture->getSize().y));
-			mBlockSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
-			mWindow->Draw(mBlockSprite);
-		}
+		x += BLOCK_SIZE;
 	}
 }

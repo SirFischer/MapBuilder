@@ -18,6 +18,7 @@ void		EditorState::InitGUI()
 
 	InitOptions();
 	InitBackButton();
+	InitSaveButton();
 }
 
 
@@ -37,6 +38,21 @@ void		EditorState::InitBackButton()
 	});
 	mf::GUI::AddWidget(btn);
 }
+
+void		EditorState::InitSaveButton()
+{
+	Map				*map = &mData->mMap;
+	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(100, 40);
+	btn->SetPosition(95, 94)->SetPositionPercentage(true);
+	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Save")->SetCharacterSize(15)
+	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetClickEvent([map]{
+		map->SaveToFile();
+	});
+	mf::GUI::AddWidget(btn);
+}
+
 
 void		EditorState::InitOptions()
 {

@@ -12,7 +12,6 @@
 #include "InputManager.hpp"
 
 #define DEFAULT_RESOURCES "assets/defaultResources"
-#define GRID_SIZE	100.f
 
 class EditorState : public State
 {
@@ -24,8 +23,6 @@ private:
 	Element					*mSelectedElement = NULL;
 	Element					*mPreviousSelectedElement = NULL;
 	std::vector<Element>	mElementList;
-	std::list<Element>		mMapElements;
-	sf::Sprite				mBlockSprite;
 	sf::Sprite				mPhantomSprite;
 
 	sf::Vector2f			mEditorPosition = sf::Vector2f(0, 0);
@@ -43,10 +40,10 @@ private:
 	bool			mGridActive = true;
 
 	void			RenderGrid();
-	void			RenderMap();
 
 	void			InitGUI();
 	void			InitBackButton();
+	void			InitSaveButton();
 	void			InitOptions();
 	void			InitGridActivationButton();
 	void			InitTextures();
