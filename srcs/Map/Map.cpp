@@ -65,6 +65,15 @@ std::string	Map::GetBasicFormat()
 	mElements.sort([](Element &e1, Element &e2){
 		return (e1.GetGridPosition().y < e2.GetGridPosition().y);
 	});
+	std::list<Element>::iterator it = mElements.begin();
+	std::list<Element>::iterator tmp;
+	while (it != mElements.end())
+	{
+		tmp = it;
+		it++;
+		if (it->GetGridPosition() == tmp->GetGridPosition())
+			mElements.erase(tmp);
+	}
 	sf::Vector2i	max = mElements.front().GetGridPosition(), min = mElements.front().GetGridPosition();
 	for (auto &i : mElements)
 	{
@@ -78,7 +87,7 @@ std::string	Map::GetBasicFormat()
 		if (pos.y > max.y)
 			max.y = pos.y;
 	}
-	std::list<Element>::iterator it = mElements.begin();
+	it = mElements.begin();
 	for (int i = min.y; i <= max.y; i++)
 	{
 		for (int j = min.x; j <= max.x; j++)
