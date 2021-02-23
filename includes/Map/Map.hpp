@@ -32,6 +32,7 @@ private:
 	std::string			GetBasicFormat();
 	std::string			GetAdvancedFormat();
 
+	void				SortElements();
 	void				ReadBasicFormat(std::fstream &tFile);
 	void				ReadAdvancedFormat(std::fstream &tFile);
 	
