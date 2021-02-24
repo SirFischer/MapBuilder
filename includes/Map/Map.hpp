@@ -52,4 +52,10 @@ public:
 	 * Getters
 	 **/
 	std::string			GetName(){return (mName);}
+	ExportFormat		GetFormat(){return (mFormat);}
+
+	/**
+	 * Setters
+	 **/
+	void				SetFormat(ExportFormat tFormat){mFormat = tFormat;}
 };

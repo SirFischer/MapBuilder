@@ -45,6 +45,10 @@ void		StateManager::Run()
 			mStates.push(new SettingsState(mWindow));
 			break;
 
+		case StateAction::EDITOR_SETTINGS:
+			mStates.push(new EditorSettingsState(mWindow));
+			break;
+
 		default:
 			delete mStates.top();
 			mStates.pop();

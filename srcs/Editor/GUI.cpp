@@ -19,6 +19,7 @@ void		EditorState::InitGUI()
 	InitOptions();
 	InitBackButton();
 	InitSaveButton();
+	InitSettingsButton();
 }
 
 
@@ -34,6 +35,23 @@ void		EditorState::InitBackButton()
 	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
 	btn->SetClickEvent([stateReturnAction, isRunning]{
 		*stateReturnAction = StateAction::POP;
+		*isRunning = false;
+	});
+	mf::GUI::AddWidget(btn);
+}
+
+void		EditorState::InitSettingsButton()
+{
+	StateAction					*stateReturnAction = &mStateReturnAction;
+	bool						*isRunning = &mIsActive;
+
+	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	btn->SetSize(100, 40);
+	btn->SetPosition(20, 94)->SetPositionPercentage(true);
+	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Settings")->SetCharacterSize(15)
+	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetClickEvent([stateReturnAction, isRunning]{
+		*stateReturnAction = StateAction::EDITOR_SETTINGS;
 		*isRunning = false;
 	});
 	mf::GUI::AddWidget(btn);

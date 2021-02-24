@@ -44,6 +44,7 @@ private:
 	void			InitGUI();
 	void			InitBackButton();
 	void			InitSaveButton();
+	void			InitSettingsButton();
 	void			InitOptions();
 	void			InitGridActivationButton();
 	void			InitTextures();

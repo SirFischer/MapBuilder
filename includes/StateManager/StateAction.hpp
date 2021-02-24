@@ -7,5 +7,6 @@ enum class StateAction
 	OPTIONS,
 	PROFILE,
 	SETUP,
-	EDITOR
+	EDITOR,
+	EDITOR_SETTINGS
 };

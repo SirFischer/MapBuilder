@@ -10,4 +10,5 @@
 #include "MenuState.hpp"
 #include "ProfileState.hpp"
 #include "SettingsState.hpp"
+#include "EditorSettingsState.hpp"
 
