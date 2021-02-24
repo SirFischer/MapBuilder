@@ -37,8 +37,8 @@ void	Map::Load()
 		{
 			std::getline(ss, token, '=');
 			std::stringstream ss2(token);
-			int		signature = (mFormat == ExportFormat::BASIC) ? (int)token[0] : std::stoi(token);
 			std::getline(ss2, token, ' ');
+			int		signature = (mFormat == ExportFormat::BASIC) ? (int)token[0] : std::stoi(token);
 			std::getline(ss2, token, ' ');
 			mSignatures[signature] = token;
 		}else if (token.find("map") != std::string::npos)
@@ -87,11 +87,35 @@ void		Map::ReadBasicFormat(std::fstream &tFile)
 
 void		Map::ReadAdvancedFormat(std::fstream &tFile)
 {
-	std::string			line;
+	std::string						line;
 
 	while (std::getline(tFile, line))
 	{
-
+		std::stringstream ss(line);
+		std::string token;
+		std::getline(ss, token, '=');
+		if (token.find("elem") != std::string::npos)
+		{
+			std::getline(ss, token, '=');
+			Element elem(mSignatures[std::stoi(token)]);
+			mElements.push_back(elem);
+		} else if (token.find("gpos") != std::string::npos)
+		{
+			std::getline(ss, token, '=');
+			std::stringstream ss2(token);
+			std::getline(ss2, token, ' ');
+			int tmp = std::stoi(token);
+			std::getline(ss2, token, ' ');
+			mElements.back().SetGridPosition(sf::Vector2i(tmp, std::stoi(token)));
+		} else if (token.find("pos") != std::string::npos)
+		{
+			std::getline(ss, token, '=');
+			std::stringstream ss2(token);
+			std::getline(ss2, token, ' ');
+			float tmp = std::stof(token);
+			std::getline(ss2, token, ' ');
+			mElements.back().SetPosition(sf::Vector2f(tmp, std::stof(token)));
+		}
 	}
 }
 
