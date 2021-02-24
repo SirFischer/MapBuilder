@@ -63,12 +63,6 @@ void		Map::SortElements()
 	});
 }
 
-
-std::string	Map::GetAdvancedFormat()
-{
-	return ("");
-}
-
 void		Map::ReadBasicFormat(std::fstream &tFile)
 {
 	std::string			line;
@@ -142,6 +136,7 @@ void		Map::AddElement(Element *tElement)
 		mElements.push_back(*tElement);
 	}
 }
+
 void		Map::RemoveElement(sf::Vector2i tPos)
 {
 	mElements.remove_if([tPos](Element element){
