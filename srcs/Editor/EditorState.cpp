@@ -102,6 +102,7 @@ void		EditorState::Init(Data *tData)
 	mWindow->ShowCursor();
 	mStateReturnAction = StateAction::POP;
 	mData = tData;
+	mSelectedElement = NULL;
 	/**
 	 * INIT STATE AND GUI
 	 **/

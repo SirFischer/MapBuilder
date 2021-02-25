@@ -29,7 +29,7 @@ void		EditorSettingsState::InitFormatButton()
 {
 	mf::Text	*text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Toggle format:");
 	text->SetBackgroundColor(sf::Color::Transparent);
-	text->SetSize(90, 10)->SetSizePercentage(true);
+	text->SetSize(150, 20);
 	text->SetCharacterSize(18);
 	mSettingsList->AddWidget(text);
 	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
