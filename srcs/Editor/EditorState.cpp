@@ -13,10 +13,10 @@ void		EditorState::InitTextures()
 {
 	//LOAD ALL TEXTURES INTO OPTIONS
 	mTextures = mf::List::Create();
-	mTextures->SetSize(95, 40)->SetSizePercentage(true)
-	->SetContentPosition(sf::Vector2f(10, 5))
+	mTextures->SetSize(95, 40)->SetSizePercentage(true, true)
+	->SetContentOffset(sf::Vector2f(10, 5))
 	->SetBackgroundColor(sf::Color::White)
-	->SetItemDirection(mf::List::eListDirection::HORIZONTAL)
+	->SetItemDirection(mf::eDirection::HORIZONTAL)
 	->SetContentOverflow(mf::List::eOverflow::WRAP)
 	->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
 	mOptions->AddWidget(mTextures);
@@ -41,8 +41,9 @@ void		EditorState::LoadTexturesFromFolder(std::string tPath)
 		if (!entry.exists())
 			break ;
 		mElementList.push_back(Element(entry.path()));
-		mf::Button	*btn = mf::Button::Create(entry.path(), entry.path());
+		mf::Button	*btn = mf::Button::Create();
 		btn->SetSize(sf::Vector2f(50, 50))
+		->SetBackground(*ResourceManager::LoadTexture(entry.path()))
 		->SetOutlineColor(sf::Color::Black);
 		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
 			btn->SetOutlineThickness(1);
@@ -131,9 +132,9 @@ void		EditorState::Update()
 	if (mSelectedElement != NULL && mSelectedElement != mPreviousSelectedElement)
 	{
 		mElementEditor->ClearWidgets();
-		mf::Image		*img = mf::Image::Create(mSelectedElement->GetPath());
+		mf::Image		*img = mf::Image::Create();
+		img->SetImage(*ResourceManager::LoadTexture(mSelectedElement->GetPath()));
 		img->SetSize(60, 60);
-		std::cout << mSelectedElement->GetPath() << "\n";
 		mElementEditor->AddWidget(img);
 		mPreviousSelectedElement = mSelectedElement;
 	}

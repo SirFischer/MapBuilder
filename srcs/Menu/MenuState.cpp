@@ -13,19 +13,19 @@ MenuState::~MenuState()
 void		MenuState::InitList()
 {
 	mProfileList = mf::List::Create();
-	mProfileList->SetSize(70, 90)->SetSizePercentage(true);
-	mProfileList->SetPosition(1, 5)->SetPositionPercentage(true);
+	mProfileList->SetSize(70, 90)->SetSizePercentage(true, true);
+	mProfileList->SetPosition(1, 5)->SetPositionPercentage(true, true);
 	mProfileList->SetBackgroundColor(sf::Color(0,0,0,0))->SetOutlineThickness(1)->SetOutlineColor(sf::Color::Black);
-	mProfileList->SetContentPosition(sf::Vector2f(10, 5));
+	mProfileList->SetContentOffset(sf::Vector2f(10, 5));
 	mf::GUI::AddWidget(mProfileList);
 
 	LoadProfiles();
 
 	mMenuList = mf::List::Create();
-	mMenuList->SetSize(25, 90)->SetSizePercentage(true);
-	mMenuList->SetPosition(72, 5)->SetPositionPercentage(true);
+	mMenuList->SetSize(25, 90)->SetSizePercentage(true, true);
+	mMenuList->SetPosition(72, 5)->SetPositionPercentage(true, true);
 	mMenuList->SetBackgroundColor(sf::Color::Transparent)->SetOutlineThickness(1)->SetOutlineColor(sf::Color::Black);
-	mMenuList->SetContentPosition(sf::Vector2f(20, 5));
+	mMenuList->SetContentOffset(sf::Vector2f(20, 5));
 	mf::GUI::AddWidget(mMenuList);
 
 	LoadMenu();

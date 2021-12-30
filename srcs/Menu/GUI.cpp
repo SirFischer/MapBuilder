@@ -8,8 +8,8 @@ void		MenuState::LoadProfiles()
 	for (const auto &entry : std::filesystem::directory_iterator(PROFILE_DIR_PATH))
 	{
 		Profile profile(entry.path());
-		mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
-		btn->SetSize(90, 5)->SetSizePercentage(true);
+		mf::Button		*btn = mf::Button::Create();
+		btn->SetSize(90, 50)->SetSizePercentage(true, false);
 		btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText(profile.GetName())
 		->SetCharacterSize(15)->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
 		btn->SetClickEvent([data, profile, stateReturnAction, isRunning]{
@@ -24,14 +24,16 @@ void		MenuState::LoadProfiles()
 void		MenuState::LoadMenu()
 {
 	Data		*data = mData;
-	mf::Text	*text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Welcome to the map builder, create or select a profile to start editing some maps...");
+	mf::Text	*text = mf::Text::Create();
 	text->SetBackgroundColor(sf::Color::Transparent);
-	text->SetSize(90, 10)->SetSizePercentage(true);
+	text->SetTextFont(*ResourceManager::LoadFont("assets/fonts/Roboto-Regular.ttf"));
+	text->SetText("Welcome to the map builder, create or select a profile to start editing some maps...");
+	text->SetSize(90, 80)->SetSizePercentage(true, false);
 	text->SetCharacterSize(18);
 	mMenuList->AddWidget(text);
 
-	mf::Button	*settingsButton = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
-	settingsButton->SetSize(90, 7)->SetSizePercentage(true);
+	mf::Button	*settingsButton = mf::Button::Create();
+	settingsButton->SetSize(90, 50)->SetSizePercentage(true, false);
 	settingsButton->SetText("Settings")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
 	settingsButton->SetCharacterSize(20);
 	bool		*active = &mIsActive;
@@ -42,8 +44,8 @@ void		MenuState::LoadMenu()
 	});
 	mMenuList->AddWidget(settingsButton);
 
-	mf::Button	*createButton = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
-	createButton->SetSize(90, 7)->SetSizePercentage(true);
+	mf::Button	*createButton = mf::Button::Create();
+	createButton->SetSize(90, 50)->SetSizePercentage(true, false);
 	createButton->SetText("Create new profile")->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetTextColor(sf::Color::Black);
 	createButton->SetCharacterSize(20);
 	createButton->SetClickEvent([active, action, data]{

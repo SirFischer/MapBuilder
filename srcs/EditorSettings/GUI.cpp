@@ -10,9 +10,9 @@ void		EditorSettingsState::InitGUI()
 void		EditorSettingsState::InitSettingsList()
 {
 	mSettingsList = mf::List::Create();
-	mSettingsList->SetSizePercentage(true)->SetSize(80, 80);
-	mSettingsList->SetPositionPercentage(true)->SetPosition(1, 1);
-	mSettingsList->SetContentPosition(sf::Vector2f(5, 5));
+	mSettingsList->SetSizePercentage(true, true)->SetSize(80, 80);
+	mSettingsList->SetPositionPercentage(true, true)->SetPosition(1, 1);
+	mSettingsList->SetContentOffset(sf::Vector2f(5, 5));
 	mSettingsList->SetBackgroundColor(sf::Color::Transparent);
 	mf::GUI::AddWidget(mSettingsList);
 
@@ -27,12 +27,13 @@ void		EditorSettingsState::InitSettingsListContent()
 
 void		EditorSettingsState::InitFormatButton()
 {
-	mf::Text	*text = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", "Toggle format:");
+	mf::Text	*text = mf::Text::Create();
 	text->SetBackgroundColor(sf::Color::Transparent);
+	text->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Toggle format:");
 	text->SetSize(150, 20);
 	text->SetCharacterSize(18);
 	mSettingsList->AddWidget(text);
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	mf::Button		*btn = mf::Button::Create();
 	btn->SetSize(100, 40);
 	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText((mData->mMap.GetFormat() == ExportFormat::BASIC) ? "BASIC" : "ADVANCED")->SetCharacterSize(15)
 	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
@@ -49,9 +50,9 @@ void		EditorSettingsState::InitBackButton()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	mf::Button		*btn = mf::Button::Create();
 	btn->SetSize(100, 40);
-	btn->SetPosition(1, 94)->SetPositionPercentage(true);
+	btn->SetPosition(1, 94)->SetPositionPercentage(true, true);
 	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Back")->SetCharacterSize(15)
 	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
 	btn->SetClickEvent([stateReturnAction, isRunning]{

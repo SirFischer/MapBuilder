@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/includes/Menu",
+                "${workspaceFolder}/includes/StateManager",
+                "${workspaceFolder}/includes/System",
+                "${workspaceFolder}/mfGUI/includes",
+                "${workspaceFolder}/includes/Profile",
+                "${workspaceFolder}/includes/Map",
+                "${workspaceFolder}/includes/Element",
+                "${workspaceFolder}/includes/ResourceManager",
+                "${workspaceFolder}/includes/Editor",
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/mfGUI/includes",
+                "${workspaceFolder}/mfGUI/includes/widgets",
+                "${workspaceFolder}/includes/EditorSettings",
+                "${workspaceFolder}/includes/Settings"
+            ],
+            "defines": [],
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
