@@ -14,11 +14,15 @@ void		SettingsState::InitBackButton()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	auto btn = mf::Button::Create();
 	btn->SetSize(100, 40);
-	btn->SetPosition(1, 94)->SetPositionPercentage(true);
-	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Back")->SetCharacterSize(15)
-	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetPosition(1, 94);
+	btn->SetPositionPercentage(true, true);
+	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+	btn->GetText()->SetString("Back");
+	btn->GetText()->SetSize(15);
+	btn->GetText()->SetColor(sf::Color::Black);
+	btn->GetText()->SetPos(sf::Vector2f(10, 5));
 	btn->SetClickEvent([stateReturnAction, isRunning]{
 		*stateReturnAction = StateAction::POP;
 		*isRunning = false;

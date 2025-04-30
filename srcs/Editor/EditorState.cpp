@@ -13,12 +13,14 @@ void		EditorState::InitTextures()
 {
 	//LOAD ALL TEXTURES INTO OPTIONS
 	mTextures = mf::List::Create();
-	mTextures->SetSize(95, 40)->SetSizePercentage(true)
-	->SetContentPosition(sf::Vector2f(10, 5))
-	->SetBackgroundColor(sf::Color::White)
-	->SetItemDirection(mf::List::eListDirection::HORIZONTAL)
-	->SetContentOverflow(mf::List::eOverflow::WRAP)
-	->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
+	mTextures->SetSize(95, 40);
+	mTextures->SetSizePercentage(true, true);
+	mTextures->SetContentOffset(sf::Vector2f(10, 5));
+	mTextures->GetBackground()->SetBackground(sf::Color::White);
+	mTextures->SetItemDirection(mf::eDirection::HORIZONTAL);
+	mTextures->SetContentOverflow(mf::List::eOverflow::WRAP);
+	mTextures->GetBackground()->SetOutlineColor(sf::Color::Black);
+	mTextures->GetBackground()->SetOutlineThickness(1.f);
 	mOptions->AddWidget(mTextures);
 	LoadTextures();
 }
@@ -41,14 +43,14 @@ void		EditorState::LoadTexturesFromFolder(std::string tPath)
 		if (!entry.exists())
 			break ;
 		mElementList.push_back(Element(entry.path()));
-		mf::Button	*btn = mf::Button::Create(entry.path(), entry.path());
-		btn->SetSize(sf::Vector2f(50, 50))
-		->SetOutlineColor(sf::Color::Black);
+		auto btn = mf::Button::Create();
+		btn->SetSize(sf::Vector2f(50, 50));
+		btn->GetBackground()->SetOutlineColor(sf::Color::Black);
 		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
-			btn->SetOutlineThickness(1);
+			btn->GetBackground()->SetOutlineThickness(1);
 		});
 		btn->AddEventListener(mf::eEvent::EXITED, [btn] {
-			btn->SetOutlineThickness(0);
+			btn->GetBackground()->SetOutlineThickness(0);
 		});
 		int num = mElementList.size();
 		std::vector<Element>	*list = &mElementList;
@@ -131,7 +133,8 @@ void		EditorState::Update()
 	if (mSelectedElement != NULL && mSelectedElement != mPreviousSelectedElement)
 	{
 		mElementEditor->ClearWidgets();
-		mf::Image		*img = mf::Image::Create(mSelectedElement->GetPath());
+		auto img = mf::Image::Create();
+		img->SetImage(mSelectedElement->GetPath());
 		img->SetSize(60, 60);
 		std::cout << mSelectedElement->GetPath() << "\n";
 		mElementEditor->AddWidget(img);

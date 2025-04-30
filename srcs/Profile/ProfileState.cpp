@@ -15,19 +15,25 @@ void		ProfileState::InitMapList()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 	std::vector<std::string>	maps = mData->mProfile.GetMaps();
-	mf::List		*list = mf::List::Create();
-	list->SetPosition(10, 120)->SetSize(400, 600);
-	list->SetBackgroundColor(sf::Color::Transparent);
-	list->SetContentPosition(sf::Vector2f(5, 0));
-	list->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1.f);
+	auto list = mf::List::Create();
+	list->SetPosition(10, 120);
+	list->SetSize(400, 600);
+	list->GetBackground()->SetBackground(sf::Color::Transparent);
+	list->SetContentOffset(sf::Vector2f(5, 0));
+	list->GetBackground()->SetOutlineColor(sf::Color::Black);
+	list->GetBackground()->SetOutlineThickness(1.f);
 	mf::GUI::AddWidget(list);
 	for (auto &entry : maps)
 	{
 		Map	map(entry);
-		mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
-		btn->SetSize(90, 5)->SetSizePercentage(true);
-		btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText(map.GetName())->SetCharacterSize(15)
-		->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+		auto btn = mf::Button::Create();
+		btn->SetSize(90, 5);
+		btn->SetSizePercentage(true, true);
+		btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+		btn->GetText()->SetString(map.GetName());
+		btn->GetText()->SetSize(15);
+		btn->GetText()->SetColor(sf::Color::Black);
+		btn->GetText()->SetPos(sf::Vector2f(10, 5));
 		btn->SetClickEvent([data, map, stateReturnAction, isRunning]{
 			data->mMap = map;
 			*stateReturnAction = StateAction::EDITOR;
@@ -42,11 +48,15 @@ void		ProfileState::InitBackButton()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	auto btn = mf::Button::Create();
 	btn->SetSize(100, 40);
-	btn->SetPosition(1, 94)->SetPositionPercentage(true);
-	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Back")->SetCharacterSize(15)
-	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetPosition(1, 94);
+	btn->SetPositionPercentage(true, true);
+	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+	btn->GetText()->SetString("Back");
+	btn->GetText()->SetSize(15);
+	btn->GetText()->SetColor(sf::Color::Black);
+	btn->GetText()->SetPos(sf::Vector2f(10, 5));
 	btn->SetClickEvent([stateReturnAction, isRunning]{
 		*stateReturnAction = StateAction::POP;
 		*isRunning = false;
@@ -57,12 +67,16 @@ void		ProfileState::InitBackButton()
 void		ProfileState::InitSaveButton()
 {
 	Data			*data = mData;
-	mf::Text		*text = mNameText;
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	auto text = mNameText;
+	auto btn = mf::Button::Create();
 	btn->SetSize(100, 40);
-	btn->SetPosition(10, 94)->SetPositionPercentage(true);
-	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Save")->SetCharacterSize(15)
-	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetPosition(10, 94);
+	btn->SetPositionPercentage(true, true);
+	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+	btn->GetText()->SetString("Save");
+	btn->GetText()->SetSize(15);
+	btn->GetText()->SetColor(sf::Color::Black);
+	btn->GetText()->SetPos(sf::Vector2f(10, 5));
 	btn->SetClickEvent([data, text]{
 		data->mProfile.SetName(text->GetString());
 		data->mProfile.SaveToFile();
@@ -75,11 +89,15 @@ void		ProfileState::InitCreateButton()
 	Data			*data = mData;
 	StateAction		*stateReturnAction = &mStateReturnAction;
 	bool			*isRunning = &mIsActive;
-	mf::Button		*btn = mf::Button::Create(sf::Color::White, sf::Color::Yellow);
+	auto btn = mf::Button::Create();
 	btn->SetSize(200, 40);
-	btn->SetPosition(1, 85)->SetPositionPercentage(true);
-	btn->SetTextFont("assets/fonts/Roboto-Regular.ttf")->SetText("Create new map...")->SetCharacterSize(15)
-	->SetTextColor(sf::Color::Black)->SetTextPosition(sf::Vector2f(10, 5));
+	btn->SetPosition(1, 85);
+	btn->SetPositionPercentage(true, true);
+	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+	btn->GetText()->SetString("Create new map...");
+	btn->GetText()->SetSize(15);
+	btn->GetText()->SetColor(sf::Color::Black);
+	btn->GetText()->SetPos(sf::Vector2f(10, 5));
 	btn->SetClickEvent([data, stateReturnAction, isRunning]{
 		time_t	t = time(0);
 		int random = rand() % 100;
@@ -97,13 +115,18 @@ void		ProfileState::InitCreateButton()
 
 void		ProfileState::InitUI()
 {
-	
 	mf::GUI::ClearWidgets();
-	mNameText = mf::Text::Create("assets/fonts/Roboto-Regular.ttf", mData->mProfile.GetName());
-	mNameText->SetTextColor(sf::Color::White);
-	mNameText->SetBackgroundColor(sf::Color::Transparent)->SetOutlineColor(sf::Color::Black)->SetOutlineThickness(1);
-	mNameText->SetPosition(10, 70)->SetSize(400, 40);
-	mNameText->EnableEdit()->SetMaxTextLength(20);
+	mNameText = mf::Text::Create();
+	mNameText->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+	mNameText->GetText()->SetString(mData->mProfile.GetName());
+	mNameText->GetText()->SetColor(sf::Color::White);
+	mNameText->GetBackground()->SetBackground(sf::Color::Transparent);
+	mNameText->GetBackground()->SetOutlineColor(sf::Color::Black);
+	mNameText->GetBackground()->SetOutlineThickness(1);
+	mNameText->SetPosition(10, 70);
+	mNameText->SetSize(400, 40);
+	mNameText->EnableEdit();
+	mNameText->SetMaxTextLength(20);
 	mf::GUI::AddWidget(mNameText);
 
 	InitBackButton();

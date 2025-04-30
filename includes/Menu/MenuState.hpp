@@ -23,8 +23,8 @@ private:
 	void		InitList();
 	void		InitUI();
 
-	mf::List	*mProfileList = NULL;
-	mf::List	*mMenuList = NULL;
+	std::shared_ptr<mf::List>	mProfileList = nullptr;
+	std::shared_ptr<mf::List>	mMenuList = nullptr;
 
 public:
 	MenuState(Window *tWindow);

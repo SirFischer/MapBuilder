@@ -19,8 +19,8 @@ private:
 	void		InitDeleteButton();
     void		InitUI();
 	
-	mf::List	*mConfirmBox = NULL;
-	mf::Text	*mNameText;
+	std::shared_ptr<mf::List>	mConfirmBox = nullptr;
+	std::shared_ptr<mf::Text>	mNameText = nullptr;
 	
 public:
     ProfileState(Window *tWindow);

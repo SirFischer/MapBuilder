@@ -6,7 +6,7 @@ class EditorSettingsState : public State
 {
 private:
 
-	mf::List		*mSettingsList;
+	std::shared_ptr<mf::List>		mSettingsList;
 	
 	void			InitGUI();
 	void			InitSettingsList();
