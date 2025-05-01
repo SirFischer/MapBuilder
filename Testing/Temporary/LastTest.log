@@ -1,0 +1,22 @@
+Start testing: May 01 18:05 CEST
+----------------------------------------------------------
+1/1 Testing: RunMapBuilder
+1/1 Test: RunMapBuilder
+Command: "/home/mfischer/Marek/Work/DeepVertic/Tools/MapBuilder/MapBuilder"
+Directory: /home/mfischer/Marek/Work/DeepVertic/Tools/MapBuilder
+"RunMapBuilder" start time: May 01 18:05 CEST
+Output:
+----------------------------------------------------------
+Failed to load image "assets/profileAssets/163501180683/sampleIMG.png". Reason: Image not of any known type, or corrupt
+assets/defaultResources/shroom-forest.png
+assets/defaultResources/dirt_w_vines.png
+assets/defaultResources/wall.png
+<end of output>
+Test time =  66.25 sec
+----------------------------------------------------------
+Test Passed.
+"RunMapBuilder" end time: May 01 18:07 CEST
+"RunMapBuilder" time elapsed: 00:01:06
+----------------------------------------------------------
+
+End testing: May 01 18:07 CEST

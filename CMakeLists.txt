@@ -34,6 +34,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/includes/Settings
     ${CMAKE_SOURCE_DIR}/includes/StateManager
     ${CMAKE_SOURCE_DIR}/includes/System
+	${CMAKE_SOURCE_DIR}/includes/Components
     ${CMAKE_SOURCE_DIR}/mfGUI/include
 )
 
@@ -63,6 +64,7 @@ set(SOURCES
     srcs/StateManager/StateManager.cpp
     srcs/System/InputManager.cpp
     srcs/System/Window.cpp
+	srcs/Components/Button.cpp
 )
 
 
@@ -87,6 +89,7 @@ set(HEADERS
 	includes/System/InputAction.hpp
 	includes/System/InputManager.hpp
 	includes/System/Window.hpp
+	includes/Components/Components.hpp
 )
 
 set(ALL_SOURCES
@@ -114,3 +117,13 @@ install(TARGETS ${PROJECT_NAME}
 
 # Copy assets to build directory
 file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
+
+# Enable testing
+enable_testing()
+
+# Add test target that runs the executable
+add_test(
+    NAME RunMapBuilder
+    COMMAND ${PROJECT_NAME}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)

@@ -4,6 +4,8 @@ int main( void )
 {
 	Window		window;
 
+	window.GetRenderWindow()->setFramerateLimit(60);
+
 	StateManager	stateManager(&window);
 
 	stateManager.Run();

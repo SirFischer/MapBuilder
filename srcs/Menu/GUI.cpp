@@ -1,4 +1,5 @@
 #include "MenuState.hpp"
+#include "Components.hpp"
 
 void		MenuState::LoadProfiles()
 {
@@ -8,19 +9,12 @@ void		MenuState::LoadProfiles()
 	for (const auto &entry : std::filesystem::directory_iterator(PROFILE_DIR_PATH))
 	{
 		Profile profile(entry.path());
-		auto btn = mf::Button::Create();
-		btn->SetSize(90, 5);
-		btn->SetSizePercentage(true, true);
-		btn->GetText()->SetString(profile.GetName());
-		btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-		btn->GetText()->SetSize(15);
-		btn->GetText()->SetColor(sf::Color::Black);
-		btn->GetText()->SetPos(sf::Vector2f(10, 5));
-		btn->SetClickEvent([data, profile, stateReturnAction, isRunning]{
+		auto btn = Components::CreateButton(profile.GetName(), sf::Vector2f(90, 5), sf::Vector2f(0, 0), [data, profile, stateReturnAction, isRunning]{
 			data->mProfile = profile;
 			*stateReturnAction = StateAction::PROFILE;
 			*isRunning = false;
 		});
+		btn->SetSizePercentage(true, true);
 		mProfileList->AddWidget(btn);
 	}
 }
@@ -38,29 +32,17 @@ void		MenuState::LoadMenu()
 	text->GetText()->SetSize(18);
 	mMenuList->AddWidget(text);
 
-	auto settingsButton = mf::Button::Create();
-	settingsButton->SetSize(90, 7);
+	auto settingsButton = Components::CreateButton("Settings", sf::Vector2f(90, 7), sf::Vector2f(0, 0), [this]{
+		mIsActive = false;
+		mStateReturnAction = StateAction::OPTIONS;
+	});
 	settingsButton->SetSizePercentage(true, true);
-	settingsButton->GetText()->SetString("Settings");
-	settingsButton->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	settingsButton->GetText()->SetColor(sf::Color::Black);
 	settingsButton->GetText()->SetSize(20);
 	bool		*active = &mIsActive;
 	StateAction	*action = &mStateReturnAction;
-	settingsButton->SetClickEvent([action, active]{
-		*active = false;
-		*action = StateAction::OPTIONS;
-	});
 	mMenuList->AddWidget(settingsButton);
 
-	auto createButton = mf::Button::Create();
-	createButton->SetSize(90, 7);
-	createButton->SetSizePercentage(true, true);
-	createButton->GetText()->SetString("Create new profile");
-	createButton->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	createButton->GetText()->SetColor(sf::Color::Black);
-	createButton->GetText()->SetSize(20);
-	createButton->SetClickEvent([active, action, data]{
+	auto createButton = Components::CreateButton("Create new profile", sf::Vector2f(90, 7), sf::Vector2f(0, 0), [active, action, data]{
 		
 		time_t	t = time(0);
 		int random = rand() % 100;
@@ -73,5 +55,8 @@ void		MenuState::LoadMenu()
 		*active = false;
 		*action = StateAction::PROFILE;
 	});
+	
+	createButton->SetSizePercentage(true, true);
+	createButton->GetText()->SetSize(20);
 	mMenuList->AddWidget(createButton);
 }

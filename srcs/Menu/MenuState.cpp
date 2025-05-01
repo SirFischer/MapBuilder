@@ -17,7 +17,7 @@ void		MenuState::InitList()
 	mProfileList->SetSizePercentage(true, true);
 	mProfileList->SetPosition(1, 5);
 	mProfileList->SetPositionPercentage(true, true);
-	mProfileList->GetBackground()->SetBackground(sf::Color(0,0,0,0));
+	mProfileList->GetBackground()->SetBackground(sf::Color(120,120,120));
 	mProfileList->GetBackground()->SetOutlineThickness(1);
 	mProfileList->GetBackground()->SetOutlineColor(sf::Color::Black);
 	mProfileList->SetContentOffset(sf::Vector2f(10, 5));
@@ -30,7 +30,7 @@ void		MenuState::InitList()
 	mMenuList->SetSizePercentage(true, true);
 	mMenuList->SetPosition(72, 5);
 	mMenuList->SetPositionPercentage(true, true);
-	mMenuList->GetBackground()->SetBackground(sf::Color::Transparent);
+	mMenuList->GetBackground()->SetBackground(sf::Color(120,120,120));
 	mMenuList->GetBackground()->SetOutlineThickness(1);
 	mMenuList->GetBackground()->SetOutlineColor(sf::Color::Black);
 	mMenuList->SetContentOffset(sf::Vector2f(20, 5));

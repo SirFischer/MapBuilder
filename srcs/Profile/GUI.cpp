@@ -1,4 +1,5 @@
 #include "ProfileState.hpp"
+#include "Components.hpp"
 
 void		ProfileState::InitConfirmBox()
 {
@@ -9,6 +10,9 @@ void		ProfileState::InitConfirmBox()
 	mConfirmBox->SetPosition(30, 30);
 	mConfirmBox->SetSizePercentage(true, true);
 	mConfirmBox->SetSize(30, 20);
+	mConfirmBox->GetBackground()->SetOutlineColor(sf::Color::Black);
+	mConfirmBox->GetBackground()->SetOutlineThickness(1.f);
+	mConfirmBox->GetBackground()->SetBackground(sf::Color(130, 130, 130));
 	
 	mf::GUI::AddWidget(mConfirmBox);
 
@@ -21,30 +25,16 @@ void		ProfileState::InitConfirmBox()
 	mConfirmBox->AddWidget(text);
 
 	auto tmp = mConfirmBox;
-	auto btn = mf::Button::Create();
-	btn->GetText()->SetString("No");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->SetSizePercentage(true, true);
-	btn->SetSize(99, 30);
-	btn->GetText()->SetSize(14);
-	btn->SetClickEvent([tmp]{
+	auto btn = Components::CreateButton("Cancel", sf::Vector2f(100, 40), sf::Vector2f(0, 0), [tmp]{
 		tmp->SetDisabled(true);
 	});
-
 	mConfirmBox->AddWidget(btn);
-	btn = mf::Button::Create();
-	btn->GetText()->SetString("Delete");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->SetSizePercentage(true, true);
-	btn->SetSize(99, 30);
-	btn->GetText()->SetSize(14);
 
 	StateAction				*stateReturnAction = &mStateReturnAction;
 	bool					*isRunning = &mIsActive;
 	Data					*data = mData;
-	btn->SetClickEvent([tmp, stateReturnAction, isRunning, data]{
+
+	btn = Components::CreateButton("Delete", sf::Vector2f(100, 40), sf::Vector2f(0, 0), [tmp, stateReturnAction, isRunning, data]{
 		tmp->SetDisabled(true);
 		data->mProfile.Delete();
 		*stateReturnAction = StateAction::POP;
@@ -57,17 +47,9 @@ void		ProfileState::InitConfirmBox()
 void		ProfileState::InitDeleteButton()
 {
 	auto confirm = mConfirmBox;
-	auto btn = mf::Button::Create();
-	btn->SetSize(100, 40);
-	btn->SetPosition(90, 94);
-	btn->SetPositionPercentage(true, true);
-	btn->GetText()->SetString("Delete");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetSize(15);
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetPos(sf::Vector2f(10, 5));
-	btn->SetClickEvent([confirm]{
+	auto btn = Components::CreateButton("Delete", sf::Vector2f(100, 40), sf::Vector2f(90, 94), [confirm]{
 		confirm->SetDisabled(false);
 	});
+	btn->SetPositionPercentage(true, true);
 	mf::GUI::AddWidget(btn);
 }

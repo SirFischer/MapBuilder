@@ -1,4 +1,5 @@
 #include "EditorState.hpp"
+#include "Components.hpp"
 
 EditorState::EditorState(Window *tWindow)
 {
@@ -43,9 +44,10 @@ void		EditorState::LoadTexturesFromFolder(std::string tPath)
 		if (!entry.exists())
 			break ;
 		mElementList.push_back(Element(entry.path()));
-		auto btn = mf::Button::Create();
-		btn->SetSize(sf::Vector2f(50, 50));
-		btn->GetBackground()->SetOutlineColor(sf::Color::Black);
+		auto btn = Components::CreateButton(entry.path().filename().string(), sf::Vector2f(50, 50), sf::Vector2f(0, 0), [this, entry] {
+			mSelectedElement = &mElementList.back();
+			mPhantomSprite.setTexture(*ResourceManager::LoadTexture(mSelectedElement->GetPath()));
+		});
 		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
 			btn->GetBackground()->SetOutlineThickness(1);
 		});
