@@ -91,8 +91,8 @@ void		ProfileState::InitUI()
 	mNameText = mf::Text::Create();
 	mNameText->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
 	mNameText->GetText()->SetString(mData->mProfile.GetName());
-	mNameText->GetText()->SetColor(sf::Color::White);
-	mNameText->GetBackground()->SetBackground(sf::Color::Transparent);
+	mNameText->GetText()->SetColor(sf::Color::Black);
+	mNameText->GetBackground()->SetBackground(sf::Color::White);
 	mNameText->GetBackground()->SetOutlineColor(sf::Color::Black);
 	mNameText->GetBackground()->SetOutlineThickness(1);
 	mNameText->SetPosition(10, 70);
@@ -140,7 +140,7 @@ void		ProfileState::HandleEvents()
 
 void		ProfileState::Update()
 {
-
+	mf::GUI::Update();
 }
 
 void		ProfileState::Render()
