@@ -37,3 +37,11 @@ MapBuilder
 assets/profileAssets
 assets/profiles
 assets/maps
+
+# Ninja and cmake files
+build.ninja
+CMakeCache.txt
+CMakeFiles/
+CMakeLists.txt.user
+CMakeLists.txt.buildinfo
+CMakeLists.txt.cmake
