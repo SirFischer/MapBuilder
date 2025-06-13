@@ -63,6 +63,24 @@ void		Map::SortElements()
 	});
 }
 
+void		Map::NormalizeElements()
+{
+	int x = 0;
+	int y = 0;
+	for (auto &i : mElements)
+	{
+		if (i.GetGridPosition().x < x)
+			x = i.GetGridPosition().x;
+		if (i.GetGridPosition().y < y)
+			y = i.GetGridPosition().y;
+	}
+	for (auto &i : mElements)
+	{
+		i.SetGridPosition(sf::Vector2i(i.GetGridPosition().x - x, i.GetGridPosition().y - y));
+		i.SetPosition(sf::Vector2f(i.GetPosition().x - x * BLOCK_SIZE, i.GetPosition().y - y * BLOCK_SIZE));
+	}
+}
+
 void		Map::ReadBasicFormat(std::fstream &tFile)
 {
 	std::string			line;

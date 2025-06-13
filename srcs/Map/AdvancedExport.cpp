@@ -6,6 +6,7 @@ std::string	Map::GetAdvancedFormat()
 	if (mElements.size() < 1)
 		return "";
 	SortElements();
+	NormalizeElements();
 	for (auto &elem : mElements)
 	{
 		int signature = (int)(' ');
