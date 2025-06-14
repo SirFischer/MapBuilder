@@ -72,11 +72,14 @@ void		ProfileState::InitCreateButton()
 	auto btn = Components::CreateButton("Create new map", sf::Vector2f(200, 40), sf::Vector2f(1, 85), [data, stateReturnAction, isRunning]{
 		time_t	t = time(0);
 		int random = rand() % 100;
-		std::string path = std::string(MAP_PATH) + std::to_string(t) + std::to_string(random) + ".map";
-		data->mProfile.AddMap(path);
-		data->mProfile.SaveToFile();
-		Map map(path);
+		std::string initialPath = std::string(MAP_PATH) + std::to_string(t) + std::to_string(random) + ".map";
+		
+		Map map(initialPath);
 		map.SaveToFile();
+		
+		data->mProfile.AddMap(map.GetPath());
+		data->mProfile.SaveToFile();
+		
 		data->mMap = map;
 		*stateReturnAction = StateAction::EDITOR;
 		*isRunning = false;

@@ -71,6 +71,7 @@ void		EditorState::InitSettingsButton()
 void		EditorState::InitSaveButton()
 {
 	Map				*map = &mData->mMap;
+	Data			*data = mData;
 	auto btn = mf::Button::Create();
 	btn->SetSize(100, 40);
 	btn->SetPosition(10, 94);
@@ -80,8 +81,16 @@ void		EditorState::InitSaveButton()
 	btn->GetText()->SetColor(sf::Color::Black);
 	btn->GetText()->SetSize(15);
 	btn->GetText()->SetPos(sf::Vector2f(10, 5));
-	btn->SetClickEvent([map]{
+	btn->SetClickEvent([map, data]{
+		std::string oldPath = map->GetPath();
 		map->SaveToFile();
+		std::string newPath = map->GetPath();
+		
+		// Update profile if the path changed
+		if (oldPath != newPath) {
+			data->mProfile.UpdateMapPath(oldPath, newPath);
+			data->mProfile.SaveToFile();
+		}
 	});
 	mf::GUI::AddWidget(btn);
 }

@@ -27,6 +27,16 @@ void			Profile::SaveToFile()
 	profileFile.close();
 }
 
+void			Profile::UpdateMapPath(const std::string &oldPath, const std::string &newPath)
+{
+	for (auto &mapPath : mMaps) {
+		if (mapPath == oldPath) {
+			mapPath = newPath;
+			break;
+		}
+	}
+}
+
 void			Profile::Delete()
 {
 	std::filesystem::remove_all(mAssets);

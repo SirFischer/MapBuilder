@@ -1,6 +1,29 @@
 #include "EditorState.hpp"
 #include "Components.hpp"
 
+// Helper function to try loading texture from multiple locations
+sf::Texture* TryLoadTextureEditor(const std::string& texturePath, const std::string& profileAssetsPath = "") {
+	sf::Texture* texture = nullptr;
+	
+	std::filesystem::path textureFile(texturePath);
+	std::string fileName = textureFile.filename().string();
+	
+	texture = ResourceManager::LoadTexture(texturePath);
+	if (texture) return texture;
+	
+	std::string defaultPath = "assets/defaultResources/" + fileName;
+	texture = ResourceManager::LoadTexture(defaultPath);
+	if (texture) return texture;
+	
+	if (!profileAssetsPath.empty()) {
+		std::string profilePath = profileAssetsPath + "/" + fileName;
+		texture = ResourceManager::LoadTexture(profilePath);
+		if (texture) return texture;
+	}
+	
+	return nullptr;
+}
+
 EditorState::EditorState(Window *tWindow)
 {
 	mWindow = tWindow;
@@ -44,10 +67,12 @@ void		EditorState::LoadTexturesFromFolder(std::string tPath)
 		if (!entry.exists())
 			break ;
 		mElementList.push_back(Element(entry.path()));
-		auto btn = Components::CreateButton(entry.path().filename().string(), sf::Vector2f(50, 50), sf::Vector2f(0, 0), [this, entry] {
+		auto texture = TryLoadTextureEditor(mElementList.back().GetPath(), mData->mProfile.GetAssetsPath());
+		auto btn = Components::CreateButton("", sf::Vector2f(50, 50), sf::Vector2f(0, 0), [this, entry] {
 			mSelectedElement = &mElementList.back();
-			mPhantomSprite.setTexture(*ResourceManager::LoadTexture(mSelectedElement->GetPath()));
+			mPhantomSprite.setTexture(*TryLoadTextureEditor(mSelectedElement->GetPath(), mData->mProfile.GetAssetsPath()));
 		});
+		btn->GetBackground()->SetBackground(*texture);
 		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
 			btn->GetBackground()->SetOutlineThickness(1);
 		});
@@ -154,7 +179,7 @@ void		EditorState::Update()
 		pos.y /= BLOCK_SIZE;
 		
 		mPhantomSprite.setPosition((int)pos.x * BLOCK_SIZE, (int)pos.y * BLOCK_SIZE);
-		sf::Texture		*texture = ResourceManager::LoadTexture(mSelectedElement->GetPath());
+		sf::Texture		*texture = TryLoadTextureEditor(mSelectedElement->GetPath(), mData->mProfile.GetAssetsPath());
 		mPhantomSprite.setTexture(*texture);
 		mPhantomSprite.setScale(sf::Vector2f(BLOCK_SIZE / texture->getSize().x, BLOCK_SIZE / texture->getSize().y));
 		mPhantomSprite.setTextureRect(sf::IntRect(0, 0, texture->getSize().x, texture->getSize().y));
@@ -179,7 +204,7 @@ void		EditorState::Render()
 	mView.zoom(mZoom);
 	mView.setCenter((mEditorPosition) + (mEditor->GetSize() / 2.f) + mEditor->GetPosition());
 	mWindow->SetView(mView);
-	mData->mMap.Render(mWindow);
+	mData->mMap.Render(mWindow, mData->mProfile.GetAssetsPath());
 	mWindow->Draw(mPhantomSprite);
 	mView.setCenter((mEditor->GetSize().x / 2.f) + mEditor->GetPosition().x, (mEditor->GetSize().y / 2.f) + mEditor->GetPosition().y);
 	mWindow->SetView(mView);
