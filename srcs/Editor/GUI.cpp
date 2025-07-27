@@ -1,4 +1,5 @@
 #include "EditorState.hpp"
+#include "Components.hpp"
 
 void		EditorState::InitGUI()
 {
@@ -14,9 +15,10 @@ void		EditorState::InitGUI()
 	mOptions->SetSize(23, 90);
 	mOptions->SetSizePercentage(true, true);
 	mOptions->SetContentOffset(sf::Vector2f(10, 5));
-	mOptions->GetBackground()->SetBackground(sf::Color::Transparent);
+	mOptions->GetBackground()->SetBackground(sf::Color(130, 130, 130));
 	mOptions->GetBackground()->SetOutlineColor(sf::Color::Black);
 	mOptions->GetBackground()->SetOutlineThickness(1.f);
+	mOptions->SetContentOverflow(mf::List::eOverflow::INVISIBLE);
 	mf::GUI::AddWidget(mOptions);
 
 	InitOptions();
@@ -31,19 +33,11 @@ void		EditorState::InitBackButton()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 
-	auto btn = mf::Button::Create();
-	btn->SetSize(100, 40);
-	btn->SetPosition(1, 94);
-	btn->SetPositionPercentage(true, true);
-	btn->GetText()->SetString("Back");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetSize(15);
-	btn->GetText()->SetPos(sf::Vector2f(10, 5));
-	btn->SetClickEvent([stateReturnAction, isRunning]{
+	auto btn = Components::CreateButton("Back", sf::Vector2f(100, 40), sf::Vector2f(1, 94), [stateReturnAction, isRunning] {
 		*stateReturnAction = StateAction::POP;
 		*isRunning = false;
 	});
+	btn->SetPositionPercentage(true, true);
 	mf::GUI::AddWidget(btn);
 }
 
@@ -52,37 +46,21 @@ void		EditorState::InitSettingsButton()
 	StateAction					*stateReturnAction = &mStateReturnAction;
 	bool						*isRunning = &mIsActive;
 
-	auto btn = mf::Button::Create();
-	btn->SetSize(100, 40);
-	btn->SetPosition(20, 94);
-	btn->SetPositionPercentage(true, true);
-	btn->GetText()->SetString("Settings");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetSize(15);
-	btn->GetText()->SetPos(sf::Vector2f(10, 5));
-	btn->SetClickEvent([stateReturnAction, isRunning]{
+	auto btn = Components::CreateButton("Settings", sf::Vector2f(100, 40), sf::Vector2f(20, 94), [stateReturnAction, isRunning] {
 		*stateReturnAction = StateAction::EDITOR_SETTINGS;
 		*isRunning = false;
 	});
+	btn->SetPositionPercentage(true, true);
 	mf::GUI::AddWidget(btn);
 }
 
 void		EditorState::InitSaveButton()
 {
 	Map				*map = &mData->mMap;
-	auto btn = mf::Button::Create();
-	btn->SetSize(100, 40);
-	btn->SetPosition(10, 94);
-	btn->SetPositionPercentage(true, true);
-	btn->GetText()->SetString("Save");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetSize(15);
-	btn->GetText()->SetPos(sf::Vector2f(10, 5));
-	btn->SetClickEvent([map]{
+	auto btn = Components::CreateButton("Save", sf::Vector2f(100, 40), sf::Vector2f(10, 94), [map] {
 		map->SaveToFile();
 	});
+	btn->SetPositionPercentage(true, true);
 	mf::GUI::AddWidget(btn);
 }
 
@@ -100,12 +78,8 @@ void		EditorState::InitOptions()
 void			EditorState::InitGridActivationButton()
 {
 	bool	*gridActive = &mGridActive;
-	auto btn = mf::Button::Create();
-	btn->SetSize(sf::Vector2f(70, 30));
-	btn->GetText()->SetString("Grid: ON");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetSize(15);
+	auto btn = Components::CreateButton("Grid: ON", sf::Vector2f(70, 30), sf::Vector2f(0, 94), [gridActive] {
+	});
 	btn->SetClickEvent([btn, gridActive]{
 		*gridActive = !*gridActive;
 		btn->GetText()->SetString((((*gridActive) ? "Grid: ON" : "Grid: OFF")));
@@ -117,41 +91,28 @@ void			EditorState::InitTextureLoader()
 {
 	auto textureLoaderList = mf::List::Create();
 	textureLoaderList->SetItemDirection(mf::eDirection::HORIZONTAL);
-	textureLoaderList->SetSize(95, 5);
-	textureLoaderList->SetSizePercentage(true, true);
+	textureLoaderList->SetSize(95, 50);
+	textureLoaderList->SetSizePercentage(true, false);
 	textureLoaderList->GetBackground()->SetBackground(sf::Color::Transparent);
 	mOptions->AddWidget(textureLoaderList);
 	
-	auto btn = mf::Button::Create();
-	btn->SetSize(50, 30);
-	btn->GetText()->SetString("Reload");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetSize(10);
-	Element	**elem = &mSelectedElement; 
-	btn->SetClickEvent([this, elem]{
+	Element	**elem = &mSelectedElement;
+	auto btn = Components::CreateButton("Load", sf::Vector2f(50, 30), sf::Vector2f(0, 0), [this, elem] {
 		*elem = NULL;
 		this->LoadTextures();
 	});
+	btn->GetText()->SetSize(10);
 	textureLoaderList->AddWidget(btn);
 	
-	btn = mf::Button::Create();
-	btn->SetSize(70, 30);
-	btn->GetText()->SetString("Open folder");
-	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
-	btn->GetText()->SetColor(sf::Color::Black);
-	btn->GetText()->SetSize(10);
 	std::string path = mData->mProfile.GetAssetsPath();
-	btn->SetClickEvent([path]{
+	btn = Components::CreateButton("Open folder", sf::Vector2f(70, 30), sf::Vector2f(0, 0), [path] {
 		#ifdef WIN32
-			
+			std::system(std::string("explorer " + path).c_str());
 		#else
-			if (std::system(std::string("xdg-open " + path).c_str()))
-			{
-				std::system(std::string("dolphin " + path).c_str());
-			}
+			std::system(std::string("xdg-open " + path).c_str());
 		#endif
 	});
+	btn->GetText()->SetSize(10);
 	textureLoaderList->AddWidget(btn);
 }
 

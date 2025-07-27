@@ -17,7 +17,7 @@ void		EditorState::InitTextures()
 	mTextures->SetSize(95, 40);
 	mTextures->SetSizePercentage(true, true);
 	mTextures->SetContentOffset(sf::Vector2f(10, 5));
-	mTextures->GetBackground()->SetBackground(sf::Color::White);
+	mTextures->GetBackground()->SetBackground(sf::Color(130, 130, 130));
 	mTextures->SetItemDirection(mf::eDirection::HORIZONTAL);
 	mTextures->SetContentOverflow(mf::List::eOverflow::WRAP);
 	mTextures->GetBackground()->SetOutlineColor(sf::Color::Black);
@@ -44,10 +44,14 @@ void		EditorState::LoadTexturesFromFolder(std::string tPath)
 		if (!entry.exists())
 			break ;
 		mElementList.push_back(Element(entry.path()));
-		auto btn = Components::CreateButton(entry.path().filename().string(), sf::Vector2f(50, 50), sf::Vector2f(0, 0), [this, entry] {
+		auto texture = ResourceManager::LoadTexture(mElementList.back().GetPath());
+		if (!texture)
+			continue ;
+		auto btn = Components::CreateButton("", sf::Vector2f(50, 50), sf::Vector2f(0, 0), [this, entry, texture] {
 			mSelectedElement = &mElementList.back();
-			mPhantomSprite.setTexture(*ResourceManager::LoadTexture(mSelectedElement->GetPath()));
+			mPhantomSprite.setTexture(*texture);
 		});
+		btn->GetBackground()->SetBackground(*texture);
 		btn->AddEventListener(mf::eEvent::ENTERED, [btn] {
 			btn->GetBackground()->SetOutlineThickness(1);
 		});
