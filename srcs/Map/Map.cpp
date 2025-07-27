@@ -1,5 +1,35 @@
 #include "Map.hpp"
 
+sf::Texture* TryLoadTexture(const std::string& texturePath, const std::string& mapPath = "", const std::string& profileAssetsPath = "") {
+	sf::Texture* texture = nullptr;
+	
+	std::filesystem::path textureFile(texturePath);
+	std::string fileName = textureFile.filename().string();
+	
+	// 1. Try defaultResources first
+	std::string defaultPath = "assets/defaultResources/" + fileName;
+	texture = ResourceManager::LoadTexture(defaultPath);
+	if (texture) return texture;
+	
+	// 2. Try profile assets
+	if (!profileAssetsPath.empty()) {
+		std::string profilePath = profileAssetsPath + "/" + fileName;
+		texture = ResourceManager::LoadTexture(profilePath);
+		if (texture) return texture;
+	}
+	
+	// 3. Try map's textures folder
+	if (!mapPath.empty()) {
+		std::filesystem::path mapPathObj(mapPath);
+		std::string mapBaseName = mapPathObj.stem().string();
+		std::string mapTexturesPath = "assets/maps/" + mapBaseName + "/textures/" + fileName;
+		texture = ResourceManager::LoadTexture(mapTexturesPath);
+		if (texture) return texture;
+	}
+	
+	return nullptr;
+}
+
 Map::Map(std::string tPath)
 {
 	mPath = tPath;
@@ -20,6 +50,8 @@ void	Map::Load()
 	std::string			line;
 
 	mapFile.open(mPath, std::ios::in);
+
+
 	while (std::getline(mapFile, line))
 	{
 		std::stringstream ss(line);
@@ -61,6 +93,24 @@ void		Map::SortElements()
 	mElements.sort([](Element &e1, Element &e2){
 		return (e1.GetGridPosition().y < e2.GetGridPosition().y);
 	});
+}
+
+void		Map::NormalizeElements()
+{
+	int x = 0;
+	int y = 0;
+	for (auto &i : mElements)
+	{
+		if (i.GetGridPosition().x < x)
+			x = i.GetGridPosition().x;
+		if (i.GetGridPosition().y < y)
+			y = i.GetGridPosition().y;
+	}
+	for (auto &i : mElements)
+	{
+		i.SetGridPosition(sf::Vector2i(i.GetGridPosition().x - x, i.GetGridPosition().y - y));
+		i.SetPosition(sf::Vector2f(i.GetPosition().x - x * BLOCK_SIZE, i.GetPosition().y - y * BLOCK_SIZE));
+	}
 }
 
 void		Map::ReadBasicFormat(std::fstream &tFile)
@@ -123,18 +173,102 @@ void		Map::ReadAdvancedFormat(std::fstream &tFile)
 
 void		Map::SaveToFile()
 {
-	std::fstream		mapFile;
-
-	mapFile.open(mPath, std::ios::out);
+	std::filesystem::path mapPath(mPath);
+	std::string baseName = mapPath.stem().string(); 
+	
+	// Always save to assets/maps, regardless of current path structure
+	std::string mapFolderPath = "assets/maps/" + baseName;
+	std::string texturesFolderPath = mapFolderPath + "/textures";
+	
+	std::filesystem::create_directories(texturesFolderPath);
+	
+	// Remove old texture files
+	if (std::filesystem::exists(texturesFolderPath))
+	{
+		for (const auto& entry : std::filesystem::directory_iterator(texturesFolderPath))
+		{
+			if (entry.is_regular_file())
+			{
+				try {
+					std::filesystem::remove(entry.path());
+				}
+				catch (const std::filesystem::filesystem_error& e) {
+					std::cerr << "Warning: Could not remove old texture file " << entry.path() << ": " << e.what() << std::endl;
+				}
+			}
+		}
+	}
+	
+	std::set<std::string> usedTextures;
+	for (const auto &signature : mSignatures)
+	{
+		usedTextures.insert(signature.second);
+	}
+	
+	std::map<std::string, std::string> pathMapping;
+	for (const std::string &texturePath : usedTextures)
+	{
+		// Find the actual source file using the same logic as TryLoadTexture
+		std::filesystem::path textureFile(texturePath);
+		std::string fileName = textureFile.filename().string();
+		std::string actualSourcePath;
+		
+		// Try to find the actual source file
+		// 1. Check if the original path exists (absolute path)
+		if (std::filesystem::exists(texturePath)) {
+			actualSourcePath = texturePath;
+		}
+		// 2. Try defaultResources
+		else {
+			std::string defaultPath = "assets/defaultResources/" + fileName;
+			if (std::filesystem::exists(defaultPath)) {
+				actualSourcePath = defaultPath;
+			}
+			// 3. Try current map's textures folder (for re-saves)
+			else {
+				std::string currentMapTexturesPath = mapFolderPath + "/textures/" + fileName;
+				if (std::filesystem::exists(currentMapTexturesPath)) {
+					actualSourcePath = currentMapTexturesPath;
+				}
+			}
+		}
+		
+		if (!actualSourcePath.empty())
+		{
+			std::string destPath = texturesFolderPath + "/" + fileName;
+			
+			try {
+				std::filesystem::copy_file(actualSourcePath, destPath, std::filesystem::copy_options::overwrite_existing);
+				pathMapping[texturePath] = "textures/" + fileName;
+			}
+			catch (const std::filesystem::filesystem_error& e) {
+				std::cerr << "Error copying texture file " << actualSourcePath << ": " << e.what() << std::endl;
+				pathMapping[texturePath] = texturePath;
+			}
+		}
+		else
+		{
+			std::cerr << "Warning: Texture file not found: " << texturePath << std::endl;
+			pathMapping[texturePath] = texturePath;
+		}
+	}
+	
+	std::string newMapFilePath = mapFolderPath + "/" + baseName + ".map";
+	std::fstream mapFile;
+	mapFile.open(newMapFilePath, std::ios::out);
+	
 	mapFile << "name=" + mName + "\n";
 	mapFile << "format=" + std::to_string((unsigned int)mFormat) + "\n";
+	
 	for (auto &i : mSignatures)
 	{
+		std::string newTexturePath = pathMapping[i.second];
 		if (mFormat == ExportFormat::BASIC && i.first < 177)
-			mapFile << "signature=" << (char)i.first << " " << i.second << '\n';
+			mapFile << "signature=" << (char)i.first << " " << newTexturePath << '\n';
 		else if (mFormat == ExportFormat::ADVANCED)
-			mapFile << "signature=" << i.first << " " << i.second << '\n';
+			mapFile << "signature=" << i.first << " " << newTexturePath << '\n';
 	}
+	
 	mapFile << '\n';
 	mapFile << "map=" << '\n';
 	if (mFormat == ExportFormat::BASIC)
@@ -142,6 +276,12 @@ void		Map::SaveToFile()
 	else
 		mapFile << GetAdvancedFormat();
 	mapFile.close();
+	
+	// Update the map's path to the new location
+	mPath = newMapFilePath;
+	
+	std::cout << "Map saved to: " << newMapFilePath << std::endl;
+	std::cout << "Textures copied to: " << texturesFolderPath << std::endl;
 }
 
 void		Map::AddElement(Element *tElement)
@@ -168,12 +308,12 @@ void		Map::RemoveElement(sf::Vector2i tPos)
 	});
 }
 
-void		Map::Render(Window *tWindow)
+void		Map::Render(Window *tWindow, const std::string &profileAssetsPath)
 {
 	sf::Sprite	mBlockSprite;
 	for (auto &i : mElements)
 	{
-		sf::Texture	*texture = ResourceManager::LoadTexture(i.GetPath());
+		sf::Texture	*texture = TryLoadTexture(i.GetPath(), mPath, profileAssetsPath);
 		if (texture)
 		{
 			mBlockSprite.setTexture(*texture);

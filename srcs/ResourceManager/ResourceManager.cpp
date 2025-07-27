@@ -48,6 +48,14 @@ sf::Texture		*ResourceManager::LoadTexture(std::string tPath)
 	try
 	{
 		texture = new sf::Texture();
+		if (!texture->loadFromFile(tPath))
+		{
+			std::cerr << "Failed to load texture: " << tPath << std::endl;
+			delete texture;
+			return (NULL);
+		}
+		mTextureResources[tPath] = std::shared_ptr<sf::Texture>(texture);
+
 	}
 	catch(const std::exception& e)
 	{
@@ -55,8 +63,7 @@ sf::Texture		*ResourceManager::LoadTexture(std::string tPath)
 		std::cerr << e.what() << '\n';
 		return (NULL);
 	}
-	texture->loadFromFile(tPath);
-	mTextureResources[tPath] = std::shared_ptr<sf::Texture>(texture);
+
 	return (texture);
 }
 

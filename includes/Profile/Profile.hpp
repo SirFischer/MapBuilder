@@ -34,6 +34,7 @@ public:
 	void						SetName(std::string tName) {mName = tName;}
 
 	void						AddMap(std::string tPath){mMaps.push_back(tPath);}
+	void						UpdateMapPath(const std::string &oldPath, const std::string &newPath);
 	
 	/**
 	 * Getters

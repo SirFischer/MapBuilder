@@ -57,8 +57,26 @@ void		EditorState::InitSettingsButton()
 void		EditorState::InitSaveButton()
 {
 	Map				*map = &mData->mMap;
-	auto btn = Components::CreateButton("Save", sf::Vector2f(100, 40), sf::Vector2f(10, 94), [map] {
+	Data			*data = mData;
+	auto btn = mf::Button::Create();
+	btn->SetSize(100, 40);
+	btn->SetPosition(10, 94);
+	btn->SetPositionPercentage(true, true);
+	btn->GetText()->SetString("Save");
+	btn->GetText()->LoadFont("assets/fonts/Roboto-Regular.ttf");
+	btn->GetText()->SetColor(sf::Color::Black);
+	btn->GetText()->SetSize(15);
+	btn->GetText()->SetPos(sf::Vector2f(10, 5));
+	btn->SetClickEvent([map, data]{
+		std::string oldPath = map->GetPath();
 		map->SaveToFile();
+		std::string newPath = map->GetPath();
+		
+		// Update profile if the path changed
+		if (oldPath != newPath) {
+			data->mProfile.UpdateMapPath(oldPath, newPath);
+			data->mProfile.SaveToFile();
+		}
 	});
 	btn->SetPositionPercentage(true, true);
 	mf::GUI::AddWidget(btn);

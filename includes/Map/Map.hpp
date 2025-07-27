@@ -7,6 +7,8 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <filesystem>
+#include <set>
 
 #include "ExportFormat.hpp"
 #include "Element.hpp"
@@ -33,6 +35,7 @@ private:
 	std::string			GetAdvancedFormat();
 
 	void				SortElements();
+	void				NormalizeElements();
 	void				ReadBasicFormat(std::fstream &tFile);
 	void				ReadAdvancedFormat(std::fstream &tFile);
 	
@@ -46,12 +49,13 @@ public:
 	void				AddElement(Element *tElement);
 	void				RemoveElement(sf::Vector2i tPos);
 
-	void				Render(Window *tWindow);
+	void				Render(Window *tWindow, const std::string &profileAssetsPath = "");
 
 	/**
 	 * Getters
 	 **/
 	std::string			GetName(){return (mName);}
+	std::string			GetPath(){return (mPath);}
 	ExportFormat		GetFormat(){return (mFormat);}
 
 	/**
